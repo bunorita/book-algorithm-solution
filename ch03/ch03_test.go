@@ -73,3 +73,14 @@ func TestIndexOf(t *testing.T) {
 		})
 	}
 }
+
+func TestMin(t *testing.T) {
+	t.Parallel()
+
+	a := []int{4, 3, 12, 7, 11}
+	want := 3
+	got := ch03.Min(a)
+	if got != want {
+		t.Errorf("want %d, but got %d\n", want, got)
+	}
+}
