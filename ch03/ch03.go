@@ -18,14 +18,12 @@ func Includes(a []int, v int) bool {
 // code 3.2
 // index at which v can be found in a
 func IndexOf(a []int, v int) int {
-	idx := -1
 	for i, ai := range a {
 		if ai == v {
-			idx = i
-			break
+			return i
 		}
 	}
-	return idx
+	return -1
 }
 
 // code 3.3
@@ -53,4 +51,26 @@ func MinSum(a, b []int) int {
 		}
 	}
 	return min
+}
+
+// PartialSumEquals returns whether partial sum of a equals w
+// bit全探索
+// O(2^n)
+func PartialSumEquals(a []int, w int) bool {
+	n := len(a)
+	// n個の整数からなる集合の部分集合は2^n通りある. 2^n == (1<<n)
+	for bit := 0; bit < (1 << n); bit++ { // bit=0,1,..,2^n-1
+		// calculate partial sum
+		var sum int
+		for i, ai := range a {
+			if bit&(1<<i) > 0 { // i桁目(i番目要素)が部分集合に含まれている
+				sum += ai
+			}
+		}
+
+		if sum == w {
+			return true
+		}
+	}
+	return false
 }
