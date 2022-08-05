@@ -84,3 +84,15 @@ func TestMin(t *testing.T) {
 		t.Errorf("want %d, but got %d\n", want, got)
 	}
 }
+
+func TestMinSum(t *testing.T) {
+	t.Parallel()
+
+	a := []int{4, 3, 12, 7, 11}
+	b := []int{8, 1, 5, 2, 9}
+	want := 4
+	got := ch03.MinSum(a, b)
+	if got != want {
+		t.Errorf("want %d, but got %d\n", want, got)
+	}
+}

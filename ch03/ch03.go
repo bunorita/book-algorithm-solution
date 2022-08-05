@@ -39,3 +39,18 @@ func Min(a []int) int {
 	}
 	return min
 }
+
+// code 3.4
+// find minimum sum of two numbers from each slices
+// O(n^2)
+func MinSum(a, b []int) int {
+	min := math.MaxInt
+	for _, ai := range a {
+		for _, bi := range b {
+			if ai+bi < min {
+				min = ai + bi
+			}
+		}
+	}
+	return min
+}
