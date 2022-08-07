@@ -130,3 +130,163 @@ func TestPartialSumEquals(t *testing.T) {
 		})
 	}
 }
+
+func TestLargestIndexOf(t *testing.T) {
+	t.Parallel()
+
+	for _, tt := range []struct {
+		name string
+		a    []int
+		v    int
+		want int
+	}{
+		{
+			name: "found once",
+			a:    []int{4, 3, 12, 7, 11},
+			v:    7,
+			want: 3,
+		},
+		{
+			name: "found twice",
+			a:    []int{4, 3, 12, 7, 11, 7, 9},
+			v:    7,
+			want: 5,
+		},
+		{
+			name: "not found",
+			a:    []int{4, 3, 12, 7, 11},
+			v:    9,
+			want: -1,
+		},
+	} {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			got := ch03.LargestIndexOf(tt.a, tt.v)
+			if got != tt.want {
+				t.Errorf("want %d, but got %d\n", tt.want, got)
+			}
+		})
+	}
+}
+
+func TestCount(t *testing.T) {
+	t.Parallel()
+
+	for _, tt := range []struct {
+		name string
+		a    []int
+		v    int
+		want int
+	}{
+		{
+			name: "found once",
+			a:    []int{4, 3, 12, 7, 11},
+			v:    7,
+			want: 1,
+		},
+		{
+			name: "found twice",
+			a:    []int{4, 3, 12, 7, 11, 7, 9},
+			v:    7,
+			want: 2,
+		},
+		{
+			name: "not found",
+			a:    []int{4, 3, 12, 7, 11},
+			v:    9,
+			want: 0,
+		},
+	} {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			got := ch03.Count(tt.a, tt.v)
+			if got != tt.want {
+				t.Errorf("want %d, but got %d\n", tt.want, got)
+			}
+		})
+	}
+}
+
+func SecondSmallest(t *testing.T) {
+	t.Parallel()
+
+	a := []int{1, 4, 3, 12, 7, 11}
+	want := 3
+	got := ch03.SecondSmallest(a)
+	if got != want {
+		t.Errorf("want %d, but got %d\n", want, got)
+	}
+}
+
+func TestLargestDiff(t *testing.T) {
+	t.Parallel()
+
+	a := []int{4, 3, 12, 7, 11}
+	want := 9
+	got := ch03.LargestDiff(a)
+	if got != want {
+		t.Errorf("want %d, but got %d\n", want, got)
+	}
+}
+
+func TestDividableCount(t *testing.T) {
+	t.Parallel()
+
+	for _, tt := range []struct {
+		name string
+		a    []int
+		want int
+	}{
+		{
+			name: "cannot divide",
+			a:    []int{1, 2},
+			want: 0,
+		},
+		{
+			name: "can divide once",
+			a:    []int{2, 4},
+			want: 1,
+		},
+		{
+			name: "can divide twice",
+			a:    []int{4, 8},
+			want: 2,
+		},
+		{
+			name: "can divide thrice",
+			a:    []int{8, 16},
+			want: 3,
+		},
+		{
+			name: "example",
+			a:    []int{8, 12, 40},
+			want: 2,
+		},
+	} {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			got := ch03.DividableCount(tt.a)
+			if got != tt.want {
+				t.Errorf("want %d, but got %d\n", tt.want, got)
+			}
+		})
+	}
+}
+
+func TestCountOfTheComb(t *testing.T) {
+	t.Parallel()
+
+	k := 10
+	n := 17
+	want := 87
+	got := ch03.CountOfTheComb(k, n)
+	if got != want {
+		t.Errorf("want %d, but got %d\n", want, got)
+	}
+}

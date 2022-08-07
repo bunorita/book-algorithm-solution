@@ -75,3 +75,108 @@ func PartialSumEquals(a []int, w int) bool {
 	}
 	return false
 }
+
+// ex 3.1
+func LargestIndexOf(a []int, v int) int {
+	foundIdx := -1
+	for i, ai := range a {
+		if ai == v {
+			foundIdx = i
+		}
+	}
+	return foundIdx
+}
+
+// ex 3.2
+// Count returns how many times v can be found in a
+func Count(a []int, v int) int {
+	var count int
+	for _, ai := range a {
+		if ai == v {
+			count++
+		}
+	}
+	return count
+}
+
+// ex 3.3
+//
+// SecondSmallest returns the second smallest value
+func SecondSmallest(a []int) int {
+	first, second := math.MaxInt, math.MaxInt
+	for _, ai := range a {
+		if ai < first {
+			first = ai
+		} else if ai < second {
+			second = ai
+		}
+	}
+	return second
+}
+
+// ex 3.4
+// LargestDiff returns the largest difference of two numbers in a
+// O(n)
+func LargestDiff(a []int) int {
+	max, min := math.MinInt, math.MaxInt
+	for _, ai := range a {
+		if ai > max {
+			max = ai
+		}
+		if ai < min {
+			min = ai
+		}
+	}
+	return max - min
+}
+
+// ex 3.5
+// DividableCount returns how many times you can divide all numbers in a by 2
+func DividableCount(a []int) int {
+	min := math.MaxInt
+	for _, ai := range a {
+		min = Less(min, dividableCount(ai))
+	}
+	return min
+}
+
+// how many times n can be divided by 2
+func dividableCount(n int) int {
+	var exp int
+	for exp = 0; n%2 == 0; exp++ {
+		n /= 2
+	}
+	return exp
+}
+
+// less one
+func Less(a, b int) int {
+	if a < b {
+		return a
+	} else {
+		return b
+	}
+}
+
+// ex 3.6
+// how many combinations of three integers of which each number is less than or equal to k, and the sum equals n
+func CountOfTheComb(k, n int) int {
+	var count int
+	for x := 0; x <= k; x++ {
+		for y := 0; y <= k; y++ {
+
+			// O(n^3)
+			// for z := 0; z <= k; z++ {
+			// 	if x+y+z == n {
+			// 		count++
+			// 	}
+			// }
+
+			z := n - x - y        // want z: x+y+z = n <=> z = n-x-y
+			if z >= 0 && z <= k { // if the z exists
+				count++
+			}
+		}
+	}
+	return count
+}
