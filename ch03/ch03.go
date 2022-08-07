@@ -1,3 +1,4 @@
+// full search
 package ch03
 
 import (
