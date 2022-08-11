@@ -2,7 +2,11 @@
 package ch03
 
 import (
+	"fmt"
+	"log"
 	"math"
+	"strconv"
+	"strings"
 )
 
 // code 3.1
@@ -179,4 +183,43 @@ func CountOfTheComb(k, n int) int {
 		}
 	}
 	return count
+}
+
+// ex 3.7
+func SumOfTheEveryAddition(s string) int {
+	// s = "125", n = len(s) = 3
+	// 125, 1+25, 12+5, 1+2+5 : 4=2^(n-1)通り
+	n := len(s)
+	splitted := strings.Split(s, "")
+	var sum int
+
+	baseDigit := 1 << (n - 2) // 2^(n-2) = 0b10
+
+	for bit := 0; bit < (1 << (n - 1)); bit++ { // 2^(n-1)通り
+		var expr string
+		for i, d := range splitted {
+			expr += d
+			currentDigit := baseDigit >> i // +を入れるか調べる場所
+			if bit&(currentDigit) > 0 {
+				expr += "+"
+			}
+		}
+		fmt.Printf("bit: %b, expr: %s\n", bit, expr)
+		sum += EvalAddition(expr)
+	}
+
+	return sum
+}
+
+func EvalAddition(expr string) int {
+	nums := strings.Split(expr, "+")
+	var sum int
+	for _, num := range nums {
+		i, err := strconv.Atoi(num)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		sum += i
+	}
+	return sum
 }

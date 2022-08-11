@@ -290,3 +290,52 @@ func TestCountOfTheComb(t *testing.T) {
 		t.Errorf("want %d, but got %d\n", want, got)
 	}
 }
+
+func TestSumOfTheEveryAddition(t *testing.T) {
+	t.Parallel()
+
+	s := "125"
+	want := 176
+	got := ch03.SumOfTheEveryAddition(s)
+	if got != want {
+		t.Errorf("want %d, but got %d\n", want, got)
+	}
+}
+
+func TestEvalAddition(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		expr string
+		want int
+	}{
+		{
+			expr: "125",
+			want: 125,
+		},
+		{
+			expr: "1+25",
+			want: 26,
+		},
+		{
+			expr: "12+5",
+			want: 17,
+		},
+		{
+			expr: "1+2+5",
+			want: 8,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.expr, func(t *testing.T) {
+			t.Parallel()
+
+			got := ch03.EvalAddition(tt.expr)
+			if got != tt.want {
+				t.Errorf("want %d, but got %d", tt.want, got)
+			}
+		})
+	}
+}
