@@ -83,6 +83,11 @@ func TestFib(t *testing.T) {
 			if gotLoop != tt.want {
 				t.Errorf("FibLoop() want %d, but got %d\n", tt.want, gotLoop)
 			}
+
+			gotMemo := ch04.FibMemo(tt.n)
+			if gotMemo != tt.want {
+				t.Errorf("FibMemo() want %d, but got %d\n", tt.want, gotMemo)
+			}
 		})
 	}
 }
@@ -93,6 +98,10 @@ func BenchmarkFib_40(b *testing.B) {
 
 func BenchmarkFibLoop_40(b *testing.B) {
 	benchmarkFib(b, ch04.FibLoop, 40)
+}
+
+func BenchmarkFibMemo_40(b *testing.B) {
+	benchmarkFib(b, ch04.FibMemo, 40)
 }
 
 func benchmarkFib(b *testing.B, fib func(int) int, n int) {

@@ -1,7 +1,10 @@
 // SumUpTo
 package ch04
 
-import "fmt"
+import (
+	"fmt"
+	"sync"
+)
 
 // code 4.2
 func SumUpTo(n int) int {
@@ -45,6 +48,30 @@ func FibLoop(n int) int {
 	for i := 2; i <= n; i++ {
 		fn = fn_1 + fn_2
 		fn_1, fn_2 = fn, fn_1
+	}
+	return fn
+}
+
+var mu sync.RWMutex // prevent concurrent map read and map write
+var fib = map[int]int{
+	0: 0,
+	1: 1,
+}
+
+// code 4.8
+// recursive with memoization
+func FibMemo(n int) int {
+	// read from memo
+	mu.RLock()
+	fn, ok := fib[n]
+	mu.RUnlock()
+
+	if !ok {
+		fn = FibMemo(n-1) + FibMemo(n-2)
+		// write to memo
+		mu.Lock()
+		fib[n] = fn
+		mu.Unlock()
 	}
 	return fn
 }
