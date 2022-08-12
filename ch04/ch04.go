@@ -13,3 +13,12 @@ func SumUpTo(n int) int {
 	fmt.Printf("sum of integers up to %d: %d\n", n, result)
 	return result
 }
+
+// code 4.4
+func GCD(m, n int) int {
+	if n == 0 {
+		return m
+	}
+	r := m % n
+	return GCD(n, r)
+}

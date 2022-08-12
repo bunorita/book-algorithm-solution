@@ -36,3 +36,14 @@ func TestSumUpTo(t *testing.T) {
 		})
 	}
 }
+
+func TestGCD(t *testing.T) {
+	t.Parallel()
+
+	m, n := 51, 15
+	want := 3
+	got := ch04.GCD(m, n)
+	if got != want {
+		t.Errorf("want %d, but got %d\n", want, got)
+	}
+}
