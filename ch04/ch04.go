@@ -25,9 +25,25 @@ func GCD(m, n int) int {
 
 // code 4.5
 // Fib returns Fibonacci number
+// recursive ver
 func Fib(n int) int {
 	if n == 0 || n == 1 {
 		return n
 	}
 	return Fib(n-1) + Fib(n-2)
+}
+
+// code 4.7
+// loop ver
+func FibLoop(n int) int {
+	if n == 0 || n == 1 {
+		return n
+	}
+	fn_1, fn_2 := 1, 0 // f(n-1), f(n-2)
+	var fn int
+	for i := 2; i <= n; i++ {
+		fn = fn_1 + fn_2
+		fn_1, fn_2 = fn, fn_1
+	}
+	return fn
 }

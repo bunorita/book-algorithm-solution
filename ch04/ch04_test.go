@@ -76,7 +76,12 @@ func TestFib(t *testing.T) {
 
 			got := ch04.Fib(tt.n)
 			if got != tt.want {
-				t.Errorf("want %d, but got %d\n", tt.want, got)
+				t.Errorf("Fib() want %d, but got %d\n", tt.want, got)
+			}
+
+			gotLoop := ch04.FibLoop(tt.n)
+			if gotLoop != tt.want {
+				t.Errorf("FibLoop() want %d, but got %d\n", tt.want, gotLoop)
 			}
 		})
 	}
