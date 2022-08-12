@@ -22,3 +22,12 @@ func GCD(m, n int) int {
 	r := m % n
 	return GCD(n, r)
 }
+
+// code 4.5
+// Fib returns Fibonacci number
+func Fib(n int) int {
+	if n == 0 || n == 1 {
+		return n
+	}
+	return Fib(n-1) + Fib(n-2)
+}
