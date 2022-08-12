@@ -35,6 +35,7 @@ func Fib(n int) int {
 
 // code 4.7
 // loop ver
+// O(n)
 func FibLoop(n int) int {
 	if n == 0 || n == 1 {
 		return n

@@ -86,3 +86,17 @@ func TestFib(t *testing.T) {
 		})
 	}
 }
+
+func BenchmarkFib_40(b *testing.B) {
+	benchmarkFib(b, ch04.Fib, 40)
+}
+
+func BenchmarkFibLoop_40(b *testing.B) {
+	benchmarkFib(b, ch04.FibLoop, 40)
+}
+
+func benchmarkFib(b *testing.B, fib func(int) int, n int) {
+	for i := 0; i < b.N; i++ {
+		fib(n)
+	}
+}
