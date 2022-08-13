@@ -75,3 +75,19 @@ func FibMemo(n int) int {
 	}
 	return fn
 }
+
+// PartialSumEquals returns whether partial sum of a equals w
+// recursive
+// O(2^n)
+func PartialSumEquals(a []int, w int) bool {
+	n := len(a)
+	// base case
+	if n == 0 {
+		return w == 0
+	}
+
+	// includes a[n-1] <=> a[:n-1] equals to w-a[n-1]
+	// OR
+	// not includes a[n-1] <=> a[:n-1] equals to w
+	return PartialSumEquals(a[:n-1], w-a[n-1]) || PartialSumEquals(a[:n-1], w)
+}

@@ -109,3 +109,43 @@ func benchmarkFib(b *testing.B, fib func(int) int, n int) {
 		fib(n)
 	}
 }
+
+func TestPartialSumEquals(t *testing.T) {
+	t.Parallel()
+
+	for _, tt := range []struct {
+		name string
+		a    []int
+		w    int
+		want bool
+	}{
+		{
+			name: "true",
+			a:    []int{1, 2, 4, 5, 11},
+			w:    10,
+			want: true,
+		},
+		{
+			name: "false",
+			a:    []int{1, 5, 8, 11},
+			w:    10,
+			want: false,
+		},
+		{
+			name: "true2",
+			a:    []int{3, 2, 6, 5},
+			w:    14,
+			want: true,
+		},
+	} {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			got := ch04.PartialSumEquals(tt.a, tt.w)
+			if got != tt.want {
+				t.Errorf("want %t, but got %t\n", tt.want, got)
+			}
+		})
+	}
+}
