@@ -184,6 +184,25 @@ func TestTrib(t *testing.T) {
 			if got != tt.want {
 				t.Errorf("Trib(%d) want %d, but got %d\n", tt.n, tt.want, got)
 			}
+
+			gotMemo := ch04.TribMemo(tt.n)
+			if got != tt.want {
+				t.Errorf("TribMemo(%d) want %d, but got %d\n", tt.n, tt.want, gotMemo)
+			}
 		})
+	}
+}
+
+func BenchmarkTrib_30(b *testing.B) {
+	benchmarkTrib(b, ch04.Trib, 30)
+}
+
+func BenchmarkTribMemo_30(b *testing.B) {
+	benchmarkTrib(b, ch04.TribMemo, 30)
+}
+
+func benchmarkTrib(b *testing.B, trib func(int) int, n int) {
+	for i := 0; i < b.N; i++ {
+		trib(n)
 	}
 }

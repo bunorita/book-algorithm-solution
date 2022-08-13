@@ -60,6 +60,7 @@ var fib = map[int]int{
 
 // code 4.8
 // recursive with memoization
+// O(n)
 func FibMemo(n int) int {
 	// read from memo
 	mu.RLock()
@@ -102,4 +103,28 @@ func Trib(n int) int {
 		return 1
 	}
 	return Trib(n-1) + Trib(n-2) + Trib(n-3)
+}
+
+var tribMu sync.RWMutex
+var trib = map[int]int{
+	0: 0,
+	1: 0,
+	2: 1,
+}
+
+// ex 4.2
+// memoization
+// O(n)
+func TribMemo(n int) int {
+	tribMu.RLock()
+	tn, ok := trib[n]
+	tribMu.RUnlock()
+
+	if !ok {
+		tn = Trib(n-1) + Trib(n-2) + Trib(n-3)
+		tribMu.Lock()
+		trib[n] = tn
+		tribMu.Unlock()
+	}
+	return tn
 }
