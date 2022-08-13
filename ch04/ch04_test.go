@@ -149,3 +149,41 @@ func TestPartialSumEquals(t *testing.T) {
 		})
 	}
 }
+
+func TestTrib(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		n    int
+		want int
+	}{
+		{
+			n:    0,
+			want: 0,
+		},
+		{
+			n:    1,
+			want: 0,
+		},
+		{
+			n:    2,
+			want: 1,
+		},
+		{
+			n:    12,
+			want: 274,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(fmt.Sprintf("n=%d", tt.n), func(t *testing.T) {
+			t.Parallel()
+
+			got := ch04.Trib(tt.n)
+			if got != tt.want {
+				t.Errorf("Trib(%d) want %d, but got %d\n", tt.n, tt.want, got)
+			}
+		})
+	}
+}

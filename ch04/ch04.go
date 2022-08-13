@@ -91,3 +91,15 @@ func PartialSumEquals(a []int, w int) bool {
 	// not includes a[n-1] <=> a[:n-1] equals to w
 	return PartialSumEquals(a[:n-1], w-a[n-1]) || PartialSumEquals(a[:n-1], w)
 }
+
+// ex 4.1
+// Tribonacci number by recursion
+func Trib(n int) int {
+	if n == 0 || n == 1 {
+		return 0
+	}
+	if n == 2 {
+		return 1
+	}
+	return Trib(n-1) + Trib(n-2) + Trib(n-3)
+}
