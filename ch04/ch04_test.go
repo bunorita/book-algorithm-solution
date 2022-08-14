@@ -206,3 +206,33 @@ func benchmarkTrib(b *testing.B, trib func(int) int, n int) {
 		trib(n)
 	}
 }
+
+func TestCount753Number(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		k    int
+		want int
+	}{
+		{
+			k:    357,
+			want: 1,
+		},
+		{
+			k:    10000,
+			want: 42,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(fmt.Sprintf("%d numbers exist, which is LTE %d", tt.want, tt.k), func(t *testing.T) {
+			t.Parallel()
+
+			got := ch04.Count753Number(tt.k)
+			if got != tt.want {
+				t.Errorf("want %d, but got %d\n", tt.want, got)
+			}
+		})
+	}
+}

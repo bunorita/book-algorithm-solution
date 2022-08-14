@@ -128,3 +128,36 @@ func TribMemo(n int) int {
 	}
 	return tn
 }
+
+// ex 4.5
+// count numbers that contain 7,5,3 and are LTE k
+// recursive
+func Count753Number(k int) int {
+	var count int
+	count753Number(k, 0, 0, &count)
+	return count
+}
+
+// n: input
+// cur: current value
+// use: flags that mean whether 7,5,3 used or not
+// count: result
+func count753Number(n int, cur int, use int, count *int) {
+	// base case
+	if cur > n {
+		return
+	}
+
+	if use == 0b111 {
+		(*count)++
+	}
+
+	// add 7 to right
+	count753Number(n, cur*10+7, use|0b100, count)
+
+	// add 5 to right
+	count753Number(n, cur*10+5, use|0b010, count)
+
+	// add 3 to right
+	count753Number(n, cur*10+3, use|0b001, count)
+}
