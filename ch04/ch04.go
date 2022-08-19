@@ -3,6 +3,7 @@ package ch04
 
 import (
 	"fmt"
+	"strconv"
 	"sync"
 )
 
@@ -160,4 +161,30 @@ func count753Number(n int, cur int, use int, count *int) {
 
 	// add 3 to right
 	count753Number(n, cur*10+3, use|0b001, count)
+}
+
+var pseMemo = map[string]bool{}
+var pseMemoMu sync.RWMutex
+
+// ex 4.6
+func PartialSumEqualsMemo(a []int, w int) bool {
+	n := len(a)
+	if n == 0 {
+		return w == 0
+	}
+
+	key := strconv.Itoa(n) + "-" + strconv.Itoa(w)
+	// read
+	pseMemoMu.RLock()
+	isEqual, ok := pseMemo[key]
+	pseMemoMu.RUnlock()
+
+	if !ok {
+		isEqual = PartialSumEqualsMemo(a[:n-1], w-a[n-1]) || PartialSumEqualsMemo(a[:n-1], w)
+		// write
+		pseMemoMu.Lock()
+		pseMemo[key] = isEqual
+		pseMemoMu.Unlock()
+	}
+	return isEqual
 }

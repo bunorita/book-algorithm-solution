@@ -146,7 +146,36 @@ func TestPartialSumEquals(t *testing.T) {
 			if got != tt.want {
 				t.Errorf("want %t, but got %t\n", tt.want, got)
 			}
+
+			gotM := ch04.PartialSumEqualsMemo(tt.a, tt.w)
+			if gotM != tt.want {
+				t.Errorf("Memoization want %t, but got %t\n", tt.want, gotM)
+			}
 		})
+	}
+}
+
+func setupBenchData() ([]int, int) {
+	a := []int{}
+	for i := 0; i < 50; i++ {
+		a = append(a, i)
+	}
+	return a, 1000
+}
+
+func BenchmarkPSE(b *testing.B) {
+	a, w := setupBenchData()
+	benchmarkPartialSumEquals(b, ch04.PartialSumEquals, a, w)
+}
+
+func BenchmarkPSEMemo(b *testing.B) {
+	a, w := setupBenchData()
+	benchmarkPartialSumEquals(b, ch04.PartialSumEqualsMemo, a, w)
+}
+
+func benchmarkPartialSumEquals(b *testing.B, pse func(a []int, w int) bool, a []int, w int) {
+	for i := 0; i < b.N; i++ {
+		pse(a, w)
 	}
 }
 
