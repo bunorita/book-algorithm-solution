@@ -10,16 +10,13 @@ import (
 func Frog1(h []int) []int {
 	dp := make([]int, len(h))
 	for i := range dp {
-		dp[i] = math.MaxInt
+		dp[i] = math.MaxInt // initialize
 	}
 
-	for i := range h {
-		if i == 0 {
-			dp[0] = 0
-			continue
-		}
+	dp[0] = 0
+	for i := 1; i < len(h); i++ {
 		if i == 1 {
-			dp[1] = h[1] - h[0]
+			dp[1] = AbsInt(h[1] - h[0])
 			continue
 		}
 		// i >= 2
