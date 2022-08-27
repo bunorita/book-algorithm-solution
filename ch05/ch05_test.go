@@ -25,6 +25,10 @@ func TestFrog1(t *testing.T) {
 			name:  "relaxation",
 			frog1: ch05.Frog1Relaxation,
 		},
+		{
+			name:  "push-based",
+			frog1: ch05.Frog1PushBased,
+		},
 	}
 
 	for _, tt := range tests {
@@ -34,7 +38,7 @@ func TestFrog1(t *testing.T) {
 
 			got := tt.frog1(h)
 			if !reflect.DeepEqual(got, want) {
-				t.Errorf("got %v, but want %v", got, want)
+				t.Errorf("got %v, want %v", got, want)
 			}
 		})
 	}

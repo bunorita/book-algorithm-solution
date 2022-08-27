@@ -56,3 +56,21 @@ func Frog1Relaxation(h []int) []int {
 	}
 	return dp
 }
+
+// 5.4
+// push-based
+func Frog1PushBased(h []int) []int {
+	dp := make([]int, len(h))
+	for i := range dp {
+		dp[i] = math.MaxInt // initialize
+	}
+
+	dp[0] = 0
+	for i := 0; i < len(h)-1; i++ {
+		chmin(&dp[i+1], dp[i]+AbsInt(h[i+1]-h[i])) // jump from i to i+1
+		if i < len(h)-2 {
+			chmin(&dp[i+2], dp[i]+AbsInt(h[i+2]-h[i])) // jump from i to i+2
+		}
+	}
+	return dp
+}
