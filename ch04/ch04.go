@@ -173,7 +173,7 @@ func PartialSumEqualsMemo(a []int, w int) bool {
 		return w == 0
 	}
 
-	key := strconv.Itoa(n) + "-" + strconv.Itoa(w)
+	key := fmt.Sprint(a) + "-" + strconv.Itoa(w)
 	// read
 	pseMemoMu.RLock()
 	isEqual, ok := pseMemo[key]
