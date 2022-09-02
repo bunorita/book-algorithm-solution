@@ -2,6 +2,7 @@ package ch05
 
 import (
 	"math"
+	"sync"
 
 	"github.com/bunorita/book-algorithm-solution/ch03"
 )
@@ -73,4 +74,74 @@ func Frog1PushBased(h []int) []int {
 		}
 	}
 	return dp
+}
+
+// 5.5
+// recursive
+func Frog1R(h []int) []int {
+	mins := make([]int, len(h))
+	for i := range h {
+		mins[i] = frog1R(h, i)
+	}
+	return mins
+}
+
+// returns minimum cost to reach h[i]
+func frog1R(h []int, i int) int {
+	if i == 0 {
+		return 0
+	}
+	min := math.MaxInt
+	chmin(&min, frog1R(h, i-1)+AbsInt(h[i]-h[i-1])) // jump from i-1 to i
+	if i > 1 {
+		chmin(&min, frog1R(h, i-2)+AbsInt(h[i]-h[i-2])) // jump from i-2 to i
+	}
+	return min
+}
+
+// 5.6
+// recursive & memoization
+func Frog1RM(h []int) []int {
+	mins := make([]int, len(h))
+	for i := range h {
+		mins[i] = frog1RM(h, i)
+	}
+	return mins
+}
+
+var frog1Memo = make(map[int]int)
+var mu sync.RWMutex
+
+func frog1RM(h []int, i int) int {
+	if i == 0 {
+		return 0
+	}
+	min := math.MaxInt
+
+	// jump from i-1 to i
+	mu.RLock()
+	min_i_1, ok := frog1Memo[i-1]
+	mu.RUnlock()
+	if !ok {
+		min_i_1 = frog1R(h, i-1)
+		mu.Lock()
+		frog1Memo[i-1] = min_i_1
+		mu.Unlock()
+	}
+	chmin(&min, min_i_1+AbsInt(h[i]-h[i-1]))
+
+	if i > 1 {
+		// jump from i-2 to i
+		mu.RLock()
+		min_i_2, ok := frog1Memo[i-2]
+		mu.RUnlock()
+		if !ok {
+			min_i_2 = frog1R(h, i-2)
+			mu.Lock()
+			frog1Memo[i-2] = min_i_2
+			mu.Unlock()
+		}
+		chmin(&min, min_i_2+AbsInt(h[i]-h[i-2]))
+	}
+	return min
 }
