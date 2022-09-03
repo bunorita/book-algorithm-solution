@@ -73,3 +73,21 @@ func benchmarkFrog1R(b *testing.B, frog1 func([]int) []int, h []int) {
 		frog1(h)
 	}
 }
+
+func TestKnapsack(t *testing.T) {
+	t.Parallel()
+
+	items := []*ch05.Item{
+		{2, 3},
+		{1, 2},
+		{3, 6},
+		{2, 1},
+		{1, 3},
+		{5, 85},
+	}
+	wmax := 9
+	want := 94
+	if got := ch05.Knapsack(items, wmax); got != want {
+		t.Errorf("got %d, want %d", got, want)
+	}
+}

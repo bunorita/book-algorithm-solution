@@ -1,6 +1,7 @@
 package ch05
 
 import (
+	"fmt"
 	"math"
 	"sync"
 
@@ -144,4 +145,53 @@ func frog1RM(h []int, i int) int {
 		chmin(&min, min_i_2+AbsInt(h[i]-h[i-2]))
 	}
 	return min
+}
+
+type Item struct {
+	Weight int
+	Value  int
+}
+
+// 5.7
+// N個の品物から、重さの総和がWを超えないように品物を選ぶ。
+// 選んだ品物の価値の総和の最大値を返す。
+func Knapsack(items []*Item, W int) int {
+	N := len(items)
+	weights, values := make([]int, N), make([]int, N)
+	for i, item := range items {
+		weights[i] = item.Weight
+		values[i] = item.Value
+	}
+
+	// dp[i+1][w] i個の品物{0,1,...i-1}までの中から重さがwを超えないように選んだ時の、価値の総和の最大値
+	dp := make([][]int, N+1)
+	for i := range dp {
+		dp[i] = make([]int, W+1)
+	}
+	// 品物が全くない状態では重さも価値も0
+	for w := 0; w <= W; w++ {
+		dp[0][w] = 0
+	}
+
+	for i := 0; i < N; i++ {
+		for w := 0; w <= W; w++ {
+			// i番目の品物を選ぶ場合
+			if weights[i] <= w {
+				chmax(&dp[i+1][w], dp[i][w-weights[i]]+values[i])
+			}
+			// i番目の品物を選ばない場合
+			chmax(&dp[i+1][w], dp[i][w])
+		}
+	}
+
+	for i, dpi := range dp {
+		fmt.Printf("i=%d %v\n", i, dpi)
+	}
+	return dp[N][W]
+}
+
+func chmax(a *int, b int) {
+	if b > *a {
+		*a = b
+	}
 }
