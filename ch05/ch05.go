@@ -195,3 +195,47 @@ func chmax(a *int, b int) {
 		*a = b
 	}
 }
+
+// 5.8 edit distance
+func EditDist(s, t string) int {
+	// dp[i][j] sの最初のiも自分と、tの最初のj文字分との編集距離
+	// edit distance between s[:i] and t[:j]
+	// dp: len(s)+1 * len(t)+1
+
+	// initialize
+	dp := make([][]int, len(s)+1)
+	for i := range dp {
+		dp[i] = make([]int, len(t)+1)
+		for j := range dp[i] {
+			dp[i][j] = math.MaxInt
+		}
+	}
+	dp[0][0] = 0 // edit distance between "" and "" is zero
+
+	for i := 0; i <= len(s); i++ {
+		for j := 0; j <= len(t); j++ {
+			// 変更操作: sのi文字目とtのj文字目を対応させる
+			if i > 0 && j > 0 {
+				if s[i-1] == t[j-1] {
+					chmin(&dp[i][j], dp[i-1][j-1])
+				} else {
+					chmin(&dp[i][j], dp[i-1][j-1]+1)
+				}
+			}
+			// 削除操作：sのi文字目を削除
+			if i > 0 {
+				chmin(&dp[i][j], dp[i-1][j]+1)
+			}
+			// 挿入操作：=> tのj文字目を削除
+			if j > 0 {
+				chmin(&dp[i][j], dp[i][j-1]+1)
+			}
+		}
+	}
+
+	// for _, row := range dp {
+	// 	fmt.Println(row)
+	// }
+
+	return dp[len(s)][len(t)]
+}

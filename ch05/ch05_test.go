@@ -91,3 +91,14 @@ func TestKnapsack(t *testing.T) {
 		t.Errorf("got %d, want %d", got, want)
 	}
 }
+
+func TestEditDist(t *testing.T) {
+	t.Parallel()
+
+	s1 := "logistic"
+	s2 := "algorithm"
+	want := 6
+	if got := ch05.EditDist(s1, s2); got != want {
+		t.Errorf("got %d, want %d", got, want)
+	}
+}
