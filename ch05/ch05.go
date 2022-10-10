@@ -6,6 +6,7 @@ import (
 	"sync"
 
 	"github.com/bunorita/book-algorithm-solution/ch03"
+	"github.com/bunorita/book-algorithm-solution/intutil"
 )
 
 // code 5.1
@@ -238,4 +239,34 @@ func EditDist(s, t string) int {
 	// }
 
 	return dp[len(s)][len(t)]
+}
+
+// 5.9 Optimize intervals
+// JOI 2016 A Oranges
+func BoxingOranges(sizes []int) int {
+	n := len(sizes)
+	// dp[i] 先頭からi個の要素、区間[0,i) について
+	// いくつかの区間に分割した時の最小コスト（各区間コストの総和の最小値）
+	dp := make([]int, n+1)
+	for i := range dp {
+		dp[i] = math.MaxInt
+	}
+	dp[0] = 0
+
+	// [0,j) = [0,i) + [i,j)
+	// chmin(dp[j], dp[i] + cost(i,j))
+	for j := 0; j <= n; j++ {
+		for i := 0; i < j; i++ {
+			chmin(&dp[j], dp[i]+costOfBox(sizes[i:j]))
+		}
+	}
+
+	return dp[n]
+}
+
+func costOfBox(sizes []int) int {
+	k := 5 // fixed cost
+	max := intutil.Max(sizes)
+	min := intutil.Min(sizes)
+	return k + (max-min)*len(sizes)
 }

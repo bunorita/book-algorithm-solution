@@ -102,3 +102,14 @@ func TestEditDist(t *testing.T) {
 		t.Errorf("got %d, want %d", got, want)
 	}
 }
+
+func TestBoxingOranges(t *testing.T) {
+	// 10 oranges
+	oranges := []int{3, 5, 4, 9, 11, 8, 10, 1, 7, 8} // sizes of each orange
+
+	want := 40
+	if got := ch05.BoxingOranges(oranges); got != want {
+		t.Errorf("got %d, want %d", got, want)
+	}
+
+}
