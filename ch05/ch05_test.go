@@ -1,6 +1,7 @@
 package ch05_test
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 
@@ -111,5 +112,53 @@ func TestBoxingOranges(t *testing.T) {
 	if got := ch05.BoxingOranges(oranges); got != want {
 		t.Errorf("got %d, want %d", got, want)
 	}
+}
 
+func TestVacation(t *testing.T) {
+	t.Parallel()
+
+	a := []int{5, 5, 2, 4, 8}
+	b := []int{1, 3, 7, 9, 1}
+	c := []int{4, 4, 3, 6, 3}
+	x := make([][3]int, len(a))
+	for i := range a {
+		x[i] = [3]int{a[i], b[i], c[i]}
+	}
+
+	tests := []*struct {
+		n    int
+		want int
+	}{
+		{
+			n:    1,
+			want: 5,
+		},
+		{
+			n:    2,
+			want: 9,
+		},
+		{
+			n:    3,
+			want: 16,
+		},
+		{
+			n:    4,
+			want: 22,
+		},
+		{
+			n:    5,
+			want: 30,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(fmt.Sprintf("n=%d", tt.n), func(t *testing.T) {
+			t.Parallel()
+
+			if got := ch05.Vacation(x[:tt.n]); got != tt.want {
+				t.Errorf("got %d, want %d", got, tt.want)
+			}
+		})
+	}
 }

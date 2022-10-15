@@ -266,7 +266,44 @@ func BoxingOranges(sizes []int) int {
 
 func costOfBox(sizes []int) int {
 	k := 5 // fixed cost
-	max := intutil.Max(sizes)
-	min := intutil.Min(sizes)
+	max := intutil.Max(sizes...)
+	min := intutil.Min(sizes...)
 	return k + (max-min)*len(sizes)
+}
+
+// ex 5.1
+func Vacation(x [][3]int) int {
+	n := len(x)
+	dp := make([][3]int, n+1)
+	// dp[i][j] 最初のi日間の行動のうち、最後の日の活動が、
+	// j = 0 のときは「海での泳ぎ」、
+	// j = 1 のときは「虫捕り」、
+	// j = 2 のときは「宿題」
+
+	for i := range dp {
+		if i == 0 {
+			continue
+		}
+		for j := range dp[i] { // 0,1,2
+			for k := range dp[i] { // 0,1,2
+				if k == j {
+					continue
+				}
+				chmax(&dp[i][j], dp[i-1][k]+x[i-1][j])
+			}
+		}
+		// j := 0 // i-1日目b or c, i日目a
+		// chmax(&dp[i][0], dp[i-1][1]+a[i-1][0]) // i-1日目b, => i日目a
+		// chmax(&dp[i][0], dp[i-1][2]+a[i-1][0]) // i-1日目c, => i日目a
+
+		// // j := 1 // i-1日目c or a, i日目b
+		// chmax(&dp[i][1], dp[i-1][2]+a[i-1][1]) // i-1日目c, => i日目b
+		// chmax(&dp[i][1], dp[i-1][0]+a[i-1][1]) // i-1日目a, => i日目b
+
+		// // j := 2 // i-1日目a or b, i日目c
+		// chmax(&dp[i][2], dp[i-1][0]+a[i-1][2]) // i-1日目c, => i日目b
+		// chmax(&dp[i][2], dp[i-1][1]+a[i-1][2]) // i-1日目a, => i日目b
+	}
+
+	return intutil.Max(dp[n][:]...)
 }
