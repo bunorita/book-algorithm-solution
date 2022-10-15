@@ -307,3 +307,29 @@ func Vacation(x [][3]int) int {
 
 	return intutil.Max(dp[n][:]...)
 }
+
+// ex5.2
+func PartialSumEquals(a []int, w int) bool {
+	n := len(a)
+
+	// dp[i][j] 最初のi個の整数の中からいくつか選んだ総和がjに等しくできる
+	dp := make([][]bool, n+1)
+	for i := range dp {
+		dp[i] = make([]bool, w+1)
+	}
+
+	dp[0][0] = true // 0個選んだ総和が0
+	for i := 0; i < n; i++ {
+		for j := 0; j <= w; j++ {
+			// a[i] を選ばない場合
+			dp[i+1][j] = dp[i][j]
+
+			// a[i] を選ぶ場合: i個から選んでjに等しくなるか <=> i-1個から選んでj-a[i]に等しくなるか
+			if j-a[i] >= 0 {
+				dp[i+1][j] = dp[i][j-a[i]]
+			}
+		}
+	}
+
+	return dp[n][w]
+}
