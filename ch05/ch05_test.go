@@ -196,3 +196,37 @@ func TestPartialSumEquals(t *testing.T) {
 		})
 	}
 }
+
+func TestCountPartialSumLTE(t *testing.T) {
+	t.Parallel()
+
+	for _, tt := range []struct {
+		name string
+		a    []int
+		w    int
+		want int
+	}{
+		{
+			name: "1",
+			a:    []int{1, 2, 4},
+			w:    10,
+			want: 3 + 3 + 1, // 3C1 + 3C2 + 3C3
+		},
+		{
+			name: "2",
+			a:    []int{1, 2, 4, 5},
+			w:    10,
+			want: 4 + 6 + 3, // 4C1 + 4C2 + 4C3-1
+		},
+	} {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			got := ch05.CountPartialSumLTE(tt.a, tt.w)
+			if got != tt.want {
+				t.Errorf("want %d, but got %d\n", tt.want, got)
+			}
+		})
+	}
+}
