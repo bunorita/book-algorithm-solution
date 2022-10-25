@@ -309,6 +309,7 @@ func Vacation(x [][3]int) int {
 }
 
 // ex5.2
+// aからいくつか選んだ数の総和がwに一致する
 func PartialSumEquals(a []int, w int) bool {
 	n := len(a)
 
@@ -336,6 +337,7 @@ func PartialSumEquals(a []int, w int) bool {
 
 // ex5.3
 // aは正の整数配列
+// aからいくつか選んだ数の総和が、1以上w以下の組み合わせが何通りあるか
 func CountPartialSumLTE(a []int, w int) int {
 	// 前半はex5.2と同じ
 	n := len(a)
@@ -365,4 +367,40 @@ func CountPartialSumLTE(a []int, w int) int {
 		}
 	}
 	return count
+}
+
+// ex5.4
+// aからk個以下の整数を選んでwに一致させることができるか
+func KIntsOrLessPartialSumEquals(a []int, K int, w int) bool {
+	// 前半はex5.2と同じ
+	n := len(a)
+	// dp[i][j][k]
+	// 最初の i 個の整数の中から、総和が j がなるように選ぶことができるかどうかを表すブール値 (true / false)。
+	// ただし選ぶ個数が k 個以内となるようにする
+	dp := make([][][]bool, n+1)
+	for i := range dp {
+		dp[i] = make([][]bool, w+1)
+		for j := range dp[i] {
+			dp[i][j] = make([]bool, K+1)
+		}
+	}
+
+	dp[0][0][0] = true // 0個選んだ総和が0
+
+	for i := 0; i < n; i++ {
+		for j := 0; j <= w; j++ {
+			for k := 0; k <= K; k++ {
+				// a[i] を選ばない場合
+				dp[i+1][j][k] = dp[i][j][k]
+
+				// k個以内で a[i] を選ぶ場合: i個から選んでjに等しくなるか <=> i-1個から選んでj-a[i]に等しくなるか
+				if j-a[i] >= 0 && k-1 >= 0 {
+					dp[i+1][j][k] = dp[i][j-a[i]][k-1]
+				}
+			}
+		}
+
+	}
+
+	return dp[n][w][K]
 }

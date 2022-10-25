@@ -230,3 +230,40 @@ func TestCountPartialSumLTE(t *testing.T) {
 		})
 	}
 }
+
+func TestKIntsOrLessPartialSumEquals(t *testing.T) {
+	t.Parallel()
+
+	for _, tt := range []struct {
+		name string
+		a    []int
+		k    int
+		w    int
+		want bool
+	}{
+		{
+			name: "true",
+			a:    []int{1, 2, 4, 5, 11},
+			k:    3,
+			w:    10,
+			want: true,
+		},
+		{
+			name: "false",
+			a:    []int{1, 2, 4, 5, 11},
+			k:    2,
+			w:    10,
+			want: false,
+		},
+	} {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			got := ch05.KIntsOrLessPartialSumEquals(tt.a, tt.k, tt.w)
+			if got != tt.want {
+				t.Errorf("want %t, but got %t\n", tt.want, got)
+			}
+		})
+	}
+}
