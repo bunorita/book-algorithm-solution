@@ -210,13 +210,14 @@ func TestCountPartialSumLTE(t *testing.T) {
 			name: "1",
 			a:    []int{1, 2, 4},
 			w:    10,
-			want: 3 + 3 + 1, // 3C1 + 3C2 + 3C3
+			want: 7, // 1,2,3,4,5,6,7
 		},
 		{
 			name: "2",
 			a:    []int{1, 2, 4, 5},
 			w:    10,
-			want: 4 + 6 + 3, // 4C1 + 4C2 + 4C3-1
+			want: 10, // 1,2,3,4,5,6,7,8,9,10
+
 		},
 	} {
 		tt := tt

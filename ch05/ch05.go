@@ -337,7 +337,7 @@ func PartialSumEquals(a []int, w int) bool {
 
 // ex5.3
 // aは正の整数配列
-// aからいくつか選んだ数の総和が、1以上w以下の組み合わせが何通りあるか
+// aからいくつか選んだ数の総和（1以上w以下）は何通りあるか
 func CountPartialSumLTE(a []int, w int) int {
 	// 前半はex5.2と同じ
 	n := len(a)
@@ -350,7 +350,7 @@ func CountPartialSumLTE(a []int, w int) int {
 	dp[0][0] = true // 0個選んだ総和が0
 	for i := 0; i < n; i++ {
 		for j := 0; j <= w; j++ {
-			// a[i] を選ばない場合
+			// a[i]を選ばない場合
 			dp[i+1][j] = dp[i][j]
 
 			// a[i] を選ぶ場合: i個から選んでjに等しくなるか <=> i-1個から選んでj-a[i]に等しくなるか
@@ -359,6 +359,13 @@ func CountPartialSumLTE(a []int, w int) int {
 			}
 		}
 	}
+
+	// for debug
+	// for i := range dp {
+	// 	for j := range dp[i] {
+	// 		fmt.Printf("%v からいくつか選んだ総和が%dに等しくなる? %t\n", a[:i], j, dp[i][j])
+	// 	}
+	// }
 
 	var count int
 	for _, dpnj := range dp[n][1:] { // dp[n][0] は除外する(j>=1)
