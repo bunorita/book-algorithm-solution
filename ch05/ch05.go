@@ -378,6 +378,7 @@ func CountPartialSumLTE(a []int, w int) int {
 
 // ex5.4
 // aからk個以下の整数を選んでwに一致させることができるか
+// O(NWK)
 func KIntsOrLessPartialSumEquals(a []int, K int, w int) bool {
 	// 前半はex5.2と同じ
 	n := len(a)
@@ -410,4 +411,46 @@ func KIntsOrLessPartialSumEquals(a []int, K int, w int) bool {
 	}
 
 	return dp[n][w][K]
+}
+
+// O(NW)
+func KIntsOrLessPartialSumEquals2(a []int, K int, w int) bool {
+	// 前半はex5.2と同じ
+	n := len(a)
+	// dp[i][j][k]
+	// 最初の i 個の整数の中から、総和が j がなるように選ぶ整数の個数最小値
+	// ただし選ぶ個数が k 個以内となるようにする
+	dp := make([][]int, n+1)
+	for i := range dp {
+		dp[i] = make([]int, w+1)
+		for j := range dp[i] {
+			dp[i][j] = math.MaxInt
+		}
+	}
+
+	dp[0][0] = 0
+
+	for i := 0; i < n; i++ {
+		for j := 0; j <= w; j++ {
+			// a[i] を選ばない場合
+			chmin(&dp[i+1][j], dp[i][j])
+
+			// k個以内で a[i] を選ぶ場合: i個から選んでjに等しくなるか <=> i-1個から選んでj-a[i]に等しくなるか
+			if j-a[i] >= 0 {
+				tmp := dp[i][j-a[i]] + 1
+				if dp[i][j-a[i]] == math.MaxInt { // math.MaxInt + 1 => -9223372036854775808 になる問題を対処
+					tmp = math.MaxInt
+				}
+				chmin(&dp[i+1][j], tmp)
+			}
+		}
+	}
+
+	// for i := range dp {
+	// 	for j := range dp[i] {
+	// 		fmt.Printf("%vから総和が%dになるように選ぶことのできる整数の最小個数 %d\n", a[:i], j, dp[i][j])
+	// 	}
+	// }
+
+	return dp[n][w] <= K
 }

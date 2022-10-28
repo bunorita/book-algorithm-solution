@@ -256,14 +256,24 @@ func TestKIntsOrLessPartialSumEquals(t *testing.T) {
 			w:    10,
 			want: false,
 		},
+		{
+			name: "debug",
+			a:    []int{1, 2},
+			k:    2,
+			w:    3,
+			want: true,
+		},
 	} {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			got := ch05.KIntsOrLessPartialSumEquals(tt.a, tt.k, tt.w)
-			if got != tt.want {
-				t.Errorf("want %t, but got %t\n", tt.want, got)
+			if got := ch05.KIntsOrLessPartialSumEquals(tt.a, tt.k, tt.w); got != tt.want {
+				t.Errorf("KIntsOrLessPartialSumEquals want %t, but got %t\n", tt.want, got)
+			}
+
+			if got := ch05.KIntsOrLessPartialSumEquals2(tt.a, tt.k, tt.w); got != tt.want {
+				t.Errorf("KIntsOrLessPartialSumEquals2 want %t, but got %t\n", tt.want, got)
 			}
 		})
 	}
