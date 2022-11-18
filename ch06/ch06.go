@@ -17,3 +17,29 @@ func BinarySearch(a []int, key int) int {
 
 	return -1
 }
+
+// generalized
+// returns minimum i that satisfies a[i] >= key
+func BinarySearchGen(a []int, key int) int {
+	// p(left) => false, p(right) => true になるように
+	p := func(m int) bool {
+		if m < 0 {
+			return false
+		}
+		if m >= len(a) {
+			return true
+		}
+		return a[m] >= key
+	}
+	left, right := -1, len(a)
+
+	for right-left > 1 {
+		mid := left + (right-left)/2
+		if p(mid) {
+			right = mid
+		} else {
+			left = mid
+		}
+	}
+	return right
+}
