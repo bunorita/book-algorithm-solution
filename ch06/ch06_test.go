@@ -64,3 +64,32 @@ func TestBinarySearchGen(t *testing.T) {
 		})
 	}
 }
+
+func TestMinSum(t *testing.T) {
+	t.Parallel()
+
+	a := []int{4, 3, 12, 7, 11}
+	b := []int{8, 1, 5, 2, 9}
+
+	tests := []*struct {
+		k    int
+		want int
+	}{
+		{k: 0, want: 4},
+		{k: 4, want: 4},
+		{k: 5, want: 5},
+		{k: 6, want: 6},
+		{k: 7, want: 8},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(fmt.Sprintf("k=%d", tt.k), func(t *testing.T) {
+			t.Parallel()
+
+			if got := ch06.MinSum(a, b, tt.k); got != tt.want {
+				t.Errorf("want %d, but got %d\n", tt.want, got)
+			}
+		})
+	}
+}

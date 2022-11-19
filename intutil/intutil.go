@@ -21,3 +21,9 @@ func Min(x ...int) int {
 	}
 	return min
 }
+
+func Chmin(a *int, b int) {
+	if b < *a {
+		*a = b
+	}
+}

@@ -1,5 +1,13 @@
 package ch06
 
+import (
+	"math"
+	"sort"
+
+	"github.com/bunorita/book-algorithm-solution/intutil"
+)
+
+// 6.1
 // a is sorted
 func BinarySearch(a []int, key int) int {
 	l, r := 0, len(a)-1
@@ -18,6 +26,7 @@ func BinarySearch(a []int, key int) int {
 	return -1
 }
 
+// 6.2
 // generalized
 // returns minimum i that satisfies a[i] >= key
 func BinarySearchGen(a []int, key int) int {
@@ -42,4 +51,27 @@ func BinarySearchGen(a []int, key int) int {
 		}
 	}
 	return right
+}
+
+// 6.4
+// find minimum sum(>=k) of two numbers from each slices
+// O(NlogN)
+// N = len(a) = len(b)
+func MinSum(a, b []int, k int) int {
+	// O(NlogN)
+	sort.Ints(a)
+	sort.Ints(b)
+	bmax := b[len(b)-1]
+
+	min := math.MaxInt
+	for i := range a { // O(N)
+		if bmax < k-a[i] {
+			continue
+		}
+		// bmax >= k-ai
+		//   => b[j] exists: b[j] >= k-a[i]
+		j := BinarySearchGen(b, k-a[i]) // O(logN)
+		intutil.Chmin(&min, a[i]+b[j])
+	}
+	return min
 }
