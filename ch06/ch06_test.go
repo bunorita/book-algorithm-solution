@@ -93,3 +93,38 @@ func TestMinSum(t *testing.T) {
 		})
 	}
 }
+
+func TestShooting(t *testing.T) {
+	t.Parallel()
+
+	tests := []*struct {
+		name string
+		h    []int
+		s    []int
+		want int
+	}{
+		{
+			name: "N=4",
+			h:    []int{5, 12, 14, 21},
+			s:    []int{6, 4, 7, 2},
+			want: 23,
+		},
+		{
+			name: "N=6",
+			h:    []int{100, 100, 100, 100, 100, 1},
+			s:    []int{1, 1, 1, 1, 1, 30},
+			want: 105,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			if got := ch06.Shooting(tt.h, tt.s); got != tt.want {
+				t.Errorf("got %d, want %d\n", got, tt.want)
+			}
+		})
+	}
+}

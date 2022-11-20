@@ -27,3 +27,9 @@ func Chmin(a *int, b int) {
 		*a = b
 	}
 }
+
+func Chmax(a *int, b int) {
+	if b > *a {
+		*a = b
+	}
+}

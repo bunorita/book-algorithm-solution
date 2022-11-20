@@ -75,3 +75,48 @@ func MinSum(a, b []int, k int) int {
 	}
 	return min
 }
+
+// 6.5 射撃王
+// h: 初期高度
+// s: 毎秒の増加高度
+// ペナルティ(全ての風船を割った時の最大高度)の最小値を求める
+func Shooting(h, s []int) int {
+	// 全ての風船を割ることができるペナルティxの最小値を求める
+
+	n := len(h) // n = len(h) = len(s)
+	left := 0
+	var right int // 二分探索の上限値(全ての風船を割れるペナルティ)
+	for i := 0; i < n; i++ {
+		intutil.Chmax(&right, h[i]+s[i]*n)
+	}
+
+	// 判定する: ペナルティx以下で全ての風船を割ることができるか?
+	p := func(x int) bool {
+		t := make([]float64, n) // 各風船を割らなければいけない残り時間
+		for i := 0; i < n; i++ {
+			// そもそもペナルティが初期高度よりも低かったらfalse
+			if x < h[i] {
+				return false
+			}
+			t[i] = float64(x-h[i]) / float64(s[i]) // 残り上昇距離 / 毎秒上昇距離
+		}
+
+		sort.Float64s(t) // 時間制限が差し迫っている順にソートする
+		for i := range t {
+			if t[i] < float64(i) { // 時間切れ発生の場合はfalse
+				return false
+			}
+		}
+		return true
+	}
+
+	for right-left > 1 {
+		mid := (left + right) / 2 // = left+(right-left)/2
+		if p(mid) {
+			right = mid
+		} else {
+			left = mid
+		}
+	}
+	return right
+}
