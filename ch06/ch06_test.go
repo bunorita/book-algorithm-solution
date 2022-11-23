@@ -2,6 +2,7 @@ package ch06_test
 
 import (
 	"fmt"
+	"reflect"
 	"testing"
 
 	"github.com/bunorita/book-algorithm-solution/ch06"
@@ -126,5 +127,15 @@ func TestShooting(t *testing.T) {
 				t.Errorf("got %d, want %d\n", got, tt.want)
 			}
 		})
+	}
+}
+
+func TestAscOrderIndices(t *testing.T) {
+	t.Parallel()
+
+	a := []int{12, 43, 7, 15, 9}
+	want := []int{2, 4, 0, 3, 1}
+	if got := ch06.AscOrderIndices(a); !reflect.DeepEqual(got, want) {
+		t.Errorf("got: %v, want: %v\n", got, want)
 	}
 }

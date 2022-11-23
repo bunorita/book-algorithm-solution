@@ -120,3 +120,19 @@ func Shooting(h, s []int) int {
 	}
 	return right
 }
+
+// ex6.1
+// 座標圧縮 O(NlogN)
+func AscOrderIndices(a []int) []int {
+	n := len(a)
+	// asc: sorted a
+	asc := make([]int, n)
+	copy(asc, a)
+	sort.Ints(asc) // O(NlogN)
+
+	indices := make([]int, n)
+	for i := range a { // O(N)
+		indices[i] = BinarySearch(asc, a[i]) // O(logN)
+	}
+	return indices
+}
