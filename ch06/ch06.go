@@ -29,7 +29,7 @@ func BinarySearch(a []int, key int) int {
 // 6.2
 // generalized
 // returns minimum i that satisfies a[i] >= key
-func BinarySearchGen(a []int, key int) int {
+func LowerBound(a []int, key int) int {
 	// p(left) => false, p(right) => true になるように
 	p := func(m int) bool {
 		if m < 0 {
@@ -39,6 +39,31 @@ func BinarySearchGen(a []int, key int) int {
 			return true
 		}
 		return a[m] >= key
+	}
+	left, right := -1, len(a)
+
+	for right-left > 1 {
+		mid := left + (right-left)/2
+		if p(mid) {
+			right = mid
+		} else {
+			left = mid
+		}
+	}
+	return right
+}
+
+// returns minimum i that satisfies a[i] > key
+func UpperBound(a []int, key int) int {
+	// p(left) => false, p(right) => true になるように
+	p := func(m int) bool {
+		if m < 0 {
+			return false
+		}
+		if m >= len(a) {
+			return true
+		}
+		return a[m] > key
 	}
 	left, right := -1, len(a)
 
@@ -70,7 +95,7 @@ func MinSum(a, b []int, k int) int {
 		}
 		// bmax >= k-ai
 		//   => b[j] exists: b[j] >= k-a[i]
-		j := BinarySearchGen(b, k-a[i]) // O(logN)
+		j := LowerBound(b, k-a[i]) // O(logN)
 		intutil.Chmin(&min, a[i]+b[j])
 	}
 	return min
@@ -135,4 +160,24 @@ func AscOrderIndices(a []int) []int {
 		indices[i] = BinarySearch(asc, a[i]) // O(logN)
 	}
 	return indices
+}
+
+// ex6.2
+// returns number of combinations that satisfies a[i] < b[j] < c[k]
+// https://atcoder.jp/contests/abc077/tasks/arc084_a
+func SnukeFestival(a, b, c []int) int {
+	n := len(a)
+
+	// O(NlogN)
+	sort.Ints(a)
+	sort.Ints(b)
+	sort.Ints(c)
+
+	var count int
+	for j := range b {
+		x := LowerBound(a, b[j])     // a[i] < b[j] となるa[i]の数
+		y := n - UpperBound(c, b[j]) // b[j] < c[k] となるc[k]の数
+		count += x * y
+	}
+	return count
 }

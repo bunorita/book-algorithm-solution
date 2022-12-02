@@ -37,21 +37,20 @@ func TestBinarySearch(t *testing.T) {
 	}
 }
 
-func TestBinarySearchGen(t *testing.T) {
+func TestLowerBound(t *testing.T) {
 	t.Parallel()
 
-	a := []int{3, 5, 8, 10, 14, 17, 21, 39}
+	a := []int{1, 3, 5}
 
 	tests := []*struct {
 		key  int
 		want int
 	}{
-		{key: 10, want: 3},
-		{key: 3, want: 0},
-		{key: 39, want: 7},
-		{key: 9, want: 3},
-		{key: 100, want: 8}, // a[i] >= 100 となるiは存在しない
-		{key: -100, want: 0},
+		{key: 0, want: 0},
+		{key: 1, want: 0},
+		{key: 2, want: 1},
+		{key: 3, want: 1},
+		{key: 6, want: 3}, // a[i] >= 100 となるiは存在しない
 	}
 
 	for _, tt := range tests {
@@ -59,7 +58,35 @@ func TestBinarySearchGen(t *testing.T) {
 		t.Run(fmt.Sprintf("key=%d", tt.key), func(t *testing.T) {
 			t.Parallel()
 
-			if got := ch06.BinarySearchGen(a, tt.key); got != tt.want {
+			if got := ch06.LowerBound(a, tt.key); got != tt.want {
+				t.Errorf("got=%d, want=%d\n", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestUpperBound(t *testing.T) {
+	t.Parallel()
+
+	a := []int{1, 3, 5}
+
+	tests := []*struct {
+		key  int
+		want int
+	}{
+		{key: 0, want: 0},
+		{key: 1, want: 1},
+		{key: 2, want: 1},
+		{key: 3, want: 2},
+		{key: 6, want: 3}, // a[i] > 100 となるiは存在しない
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(fmt.Sprintf("key=%d", tt.key), func(t *testing.T) {
+			t.Parallel()
+
+			if got := ch06.UpperBound(a, tt.key); got != tt.want {
 				t.Errorf("got=%d, want=%d\n", got, tt.want)
 			}
 		})
@@ -137,5 +164,48 @@ func TestAscOrderIndices(t *testing.T) {
 	want := []int{2, 4, 0, 3, 1}
 	if got := ch06.AscOrderIndices(a); !reflect.DeepEqual(got, want) {
 		t.Errorf("got: %v, want: %v\n", got, want)
+	}
+}
+
+func TestSnukeFestival(t *testing.T) {
+	t.Parallel()
+
+	tests := []*struct {
+		name    string
+		a, b, c []int
+		want    int
+	}{
+		{
+			name: "N=2",
+			a:    []int{1, 5},
+			b:    []int{2, 4},
+			c:    []int{3, 6},
+			want: 3,
+		},
+		{
+			name: "N=3",
+			a:    []int{1, 1, 1},
+			b:    []int{2, 2, 2},
+			c:    []int{3, 3, 3},
+			want: 27,
+		},
+		{
+			name: "N=6",
+			a:    []int{3, 14, 159, 2, 6, 53},
+			b:    []int{58, 9, 79, 323, 84, 6},
+			c:    []int{2643, 383, 2, 79, 50, 288},
+			want: 87,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			if got := ch06.SnukeFestival(tt.a, tt.b, tt.c); got != tt.want {
+				t.Errorf("got %d, want %d\n", got, tt.want)
+			}
+		})
 	}
 }
