@@ -181,3 +181,41 @@ func SnukeFestival(a, b, c []int) int {
 	}
 	return count
 }
+
+// ex6.4
+// N: number of stalls
+// a: a[i] = each stall location. sorted.
+// m: number of cows. m <= N
+// returns the largest minimum distance of cows
+// O(NlogA): A=a[n-1]
+// http://poj.org/problem?id=2456
+func AggressiveCows(a []int, m int) int {
+	n := len(a)
+
+	// N個の小屋からm個を選択して、間の距離をx以上離すことはできるか？
+	// <=> x離れた小屋を選んでいくとm個以上になるか？
+	f := func(x int) bool {
+		prevI := 0 // 前に選んだ小屋index
+		count := 1 // 選んだ小屋の数
+		// O(N)
+		for i := range a {
+			if a[i]-a[prevI] >= x { // 前の小屋とx以上離れていたら選ぶ
+				prevI = i
+				count++
+			}
+		}
+		return count >= m
+	}
+
+	left := 0       // f(left) =>  true
+	right := a[n-1] // f(right) => false
+	for right-left > 1 {
+		mid := (left + right) / 2
+		if f(mid) {
+			left = mid
+		} else {
+			right = mid
+		}
+	}
+	return left
+}

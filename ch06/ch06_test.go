@@ -209,3 +209,15 @@ func TestSnukeFestival(t *testing.T) {
 		})
 	}
 }
+
+func TestAggressiveCows(t *testing.T) {
+	t.Parallel()
+
+	// N=5
+	a := []int{1, 2, 4, 8, 9}
+	m := 3
+	want := 3
+	if got := ch06.AggressiveCows(a, m); got != want {
+		t.Errorf("got %d, want %d\n", got, want)
+	}
+}
