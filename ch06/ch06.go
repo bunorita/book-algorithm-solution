@@ -219,3 +219,31 @@ func AggressiveCows(a []int, m int) int {
 	}
 	return left
 }
+
+// ex6.6
+// https://atcoder.jp/contests/abc026/tasks/abc026_d
+// 1 <= a,b,c <= 100
+func TakahashiBall(t, a, b, c float64) float64 {
+	// f(t) = a*t + b*sin(c*t*Pi)
+	return a*t + b*math.Sin(c*t*math.Pi)
+}
+
+// want t: f(t) = 100
+func TakahashiBallSolver(a, b, c float64) float64 {
+	// g(t) returns whether f(t) >= 100
+	g := func(t float64) bool {
+		return TakahashiBall(t, a, b, c) >= 100
+	}
+	left := 0.0    // g(left) => false
+	right := 200.0 // g(right) => true
+
+	for i := 0; i < 100; i++ { // 誤差が十分小さくなる回数
+		mid := (left + right) / 2
+		if g(mid) {
+			right = mid
+		} else {
+			left = mid
+		}
+	}
+	return right
+}

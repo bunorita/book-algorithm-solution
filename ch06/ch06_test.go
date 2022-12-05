@@ -2,6 +2,7 @@ package ch06_test
 
 import (
 	"fmt"
+	"math"
 	"reflect"
 	"testing"
 
@@ -219,5 +220,43 @@ func TestAggressiveCows(t *testing.T) {
 	want := 3
 	if got := ch06.AggressiveCows(a, m); got != want {
 		t.Errorf("got %d, want %d\n", got, want)
+	}
+}
+
+func TestTakahashiBallSolver(t *testing.T) {
+	t.Parallel()
+
+	tests := []*struct {
+		name    string
+		a, b, c float64
+		want    float64
+	}{
+		{
+			name: "example1",
+			a:    1,
+			b:    1,
+			c:    1,
+		},
+		{
+			name: "example2",
+			a:    53,
+			b:    82,
+			c:    49,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			gotT := ch06.TakahashiBallSolver(tt.a, tt.b, tt.c)
+			gotF := ch06.TakahashiBall(gotT, tt.a, tt.b, tt.c)
+
+			// 誤差 <= 10**-6 以内なら正解とする
+			if precision := math.Abs(gotF - 100); precision > math.Pow(10, -6) {
+				t.Errorf("got t=%f, f(t)=%f, want f(t)=100\n", gotT, gotF)
+			}
+		})
 	}
 }
