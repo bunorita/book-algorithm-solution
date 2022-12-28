@@ -1,6 +1,7 @@
 package ch07
 
 import (
+	"fmt"
 	"sort"
 )
 
@@ -27,4 +28,24 @@ func IntervalScheduling(intervals []*Interval) int {
 	}
 
 	return len(selected)
+}
+
+// 7.3
+// https://atcoder.jp/contests/agc009/tasks/agc009_a
+func MultipleArray(a, b []int) int {
+	n := len(a)
+
+	var sum int
+	for i := n - 1; i >= 0; i-- {
+		a[i] += sum // 前回までの操作回数を足す
+
+		var di int
+		if r := a[i] % b[i]; r != 0 {
+			di = b[i] - r
+		}
+		fmt.Printf("i=%d, d[i]=%d\n", i, di)
+		sum += di
+	}
+
+	return sum
 }
