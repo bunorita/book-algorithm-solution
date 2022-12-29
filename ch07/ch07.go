@@ -49,3 +49,31 @@ func MultipleArray(a, b []int) int {
 
 	return sum
 }
+
+// ex 7.1
+func CreatePairs(a, b []int) int {
+	n := len(a)
+	sort.Ints(a) // O(N*logN)
+	sort.Ints(b)
+
+	var i int
+	for j := 0; j < n; j++ { // O(N)
+		if a[i] < b[j] {
+			i++
+		}
+	}
+	return i
+
+	// var count int
+	// var nextJ int
+	// for i := 0; i < n; i++ {
+	// 	for j := nextJ; j < n; j++ {
+	// 		if a[i] < b[j] {
+	// 			count++
+	// 			nextJ = j + 1
+	// 			break
+	// 		}
+	// 	}
+	// }
+	// return count
+}
