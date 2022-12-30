@@ -45,12 +45,37 @@ func TestArraySet(t *testing.T) {
 func TestArrayAppend(t *testing.T) {
 	t.Parallel()
 
-	a := ch08.NewArray(1, 2, 3)
-	a.Append(4)
+	tests := []*struct {
+		name   string
+		augend *ch08.Array
+		addend []int
+		want   *ch08.Array
+	}{
+		{
+			name:   "case1",
+			augend: &ch08.Array{1, 2, 3},
+			addend: []int{4},
+			want:   &ch08.Array{1, 2, 3, 4},
+		},
+		{
+			name:   "case2",
+			augend: &ch08.Array{1, 2, 3},
+			addend: []int{4, 5},
+			want:   &ch08.Array{1, 2, 3, 4, 5},
+		},
+	}
 
-	want := &ch08.Array{1, 2, 3, 4}
-	if got := a; !reflect.DeepEqual(got, want) {
-		t.Errorf("got: %v, want: %v", got, want)
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			tt.augend.Append(tt.addend...)
+
+			if got := tt.augend; !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("got: %v, want: %v", got, tt.want)
+			}
+		})
 	}
 }
 
