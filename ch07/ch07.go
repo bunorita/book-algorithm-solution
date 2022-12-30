@@ -77,3 +77,27 @@ func CreatePairs(a, b []int) int {
 	// }
 	// return count
 }
+
+// ex7.3
+// https://atcoder.jp/contests/abc131/tasks/abc131_d
+func JobsDone(jobs []*Job) bool {
+	// Order BY deadline DESC
+	// O(N*logN)
+	sort.Slice(jobs, func(i, j int) bool {
+		return jobs[i].Deadline < jobs[j].Deadline
+	})
+
+	t := 0 // current itme
+	for _, job := range jobs {
+		if t+job.Duration > job.Deadline {
+			return false
+		}
+		t += job.Duration
+	}
+	return true
+}
+
+type Job struct {
+	Duration int
+	Deadline int
+}
