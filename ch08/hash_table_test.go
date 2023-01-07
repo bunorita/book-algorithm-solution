@@ -47,6 +47,21 @@ func TestHashTableGetEmpty(t *testing.T) {
 	}
 }
 
+func TestHashTableSetSameKey(t *testing.T) {
+	t.Parallel()
+
+	h := ch08.NewHashTable(3)
+	h.Set("red", "apple")
+	h.Set("red", "sun")
+
+	h.PrintArray()
+
+	want := "sun"
+	if got := h.Get("red"); got != want {
+		t.Errorf("got=%q, want=%q\n", got, want)
+	}
+}
+
 func TestHashTableUnset(t *testing.T) {
 	t.Parallel()
 

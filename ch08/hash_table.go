@@ -38,6 +38,11 @@ func (h *HashTable) hash(x string) int {
 }
 
 func (h *HashTable) Set(key, val string) {
+	if node := h.t[h.hash(key)].getNodeByKey(key); node != nil {
+		// overwrite value of existing key
+		node.value = val
+		return
+	}
 	h.t[h.hash(key)].Append(NewLinkedListNode(key, val))
 }
 
