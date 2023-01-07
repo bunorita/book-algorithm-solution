@@ -36,3 +36,13 @@ func TestHashTableAccessors(t *testing.T) {
 		})
 	}
 }
+
+func TestHashTableGetEmpty(t *testing.T) {
+	t.Parallel()
+
+	h := ch08.NewHashTable(3)
+	want := ""
+	if got := h.Get("red"); got != want {
+		t.Errorf("got=%q, want=%q\n", got, want)
+	}
+}

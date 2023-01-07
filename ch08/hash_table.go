@@ -42,5 +42,9 @@ func (h *HashTable) Set(key, val string) {
 }
 
 func (h *HashTable) Get(key string) string {
-	return h.t[h.hash(key)].getNodeByKey(key).value
+	node := h.t[h.hash(key)].getNodeByKey(key)
+	if node == nil {
+		return ""
+	}
+	return node.value
 }
