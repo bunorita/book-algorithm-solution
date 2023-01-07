@@ -6,14 +6,18 @@ import (
 )
 
 type HashTable struct {
-	t []string // values
-	m int      // size of t
+	t []*LinkedList // values
+	m int           // size of t
 }
 
 func NewHashTable(m int) *HashTable {
+	t := make([]*LinkedList, m)
+	for i := range t {
+		t[i] = NewLinkedList()
+	}
 	return &HashTable{
 		m: m,
-		t: make([]string, m),
+		t: t,
 	}
 }
 
@@ -34,9 +38,9 @@ func (h *HashTable) hash(x string) int {
 }
 
 func (h *HashTable) Set(key, val string) {
-	h.t[h.hash(key)] = val
+	h.t[h.hash(key)].Append(NewLinkedListNode(key, val))
 }
 
 func (h *HashTable) Get(key string) string {
-	return h.t[h.hash(key)]
+	return h.t[h.hash(key)].getNodeByKey(key).value
 }

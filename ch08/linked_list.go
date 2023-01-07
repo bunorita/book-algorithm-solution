@@ -1,82 +1,31 @@
 package ch08
 
-func NewNode(name string) *Node {
-	return &Node{name: name}
+// Bidirectional Linked List (Doubly linked list)
+type LinkedNode struct {
+	key, value string
+	next, prev *LinkedNode
 }
 
-type Node struct {
-	next *Node
-	name string
+func NewLinkedListNode(key, value string) *LinkedNode {
+	return &LinkedNode{key: key, value: value}
 }
 
 type LinkedList struct {
-	sentinel *Node
+	sentinel *LinkedNode
 }
 
-func NewList(names ...string) *LinkedList {
-	l := &LinkedList{
-		sentinel: NewNode(""), // sentinel node
+func NewLinkedList(values ...string) *LinkedList {
+	dl := &LinkedList{
+		sentinel: &LinkedNode{},
 	}
-	for i := len(names) - 1; i >= 0; i-- {
-		l.Prepend(NewNode(names[i]))
-	}
-	return l
-}
-
-// Insert v after p
-func (l *LinkedList) Insert(v, p *Node) {
-	if p == nil {
-		p = l.sentinel
-	}
-	// p - v
-	v.next = p.next
-	p.next = v
-}
-
-func (l *LinkedList) Prepend(v *Node) {
-	l.Insert(v, nil)
-}
-
-func (l *LinkedList) GetNodeByName(name string) *Node {
-	// O(N)
-	for cur := l.sentinel.next; cur != nil; cur = cur.next {
-		if cur.name == name {
-			return cur
-		}
-	}
-	return nil
-}
-
-func (l *LinkedList) String() string {
-	var s string
-	for cur := l.sentinel.next; cur != nil; cur = cur.next {
-		s += cur.name + " -> "
-	}
-	return s
-}
-
-// Bidirectional Linked List
-type DoublyLinkedNode struct {
-	name       string
-	next, prev *DoublyLinkedNode
-}
-
-type DoublyLinkedList struct {
-	sentinel *DoublyLinkedNode
-}
-
-func NewDoublyLinkedList(names ...string) *DoublyLinkedList {
-	dl := &DoublyLinkedList{
-		sentinel: &DoublyLinkedNode{},
-	}
-	for i := len(names) - 1; i >= 0; i-- {
-		dl.Prepend(&DoublyLinkedNode{name: names[i]})
+	for i := len(values) - 1; i >= 0; i-- {
+		dl.Prepend(&LinkedNode{value: values[i]})
 	}
 	return dl
 }
 
 // insert v after p
-func (dl *DoublyLinkedList) Insert(v, p *DoublyLinkedNode) {
+func (dl *LinkedList) Insert(v, p *LinkedNode) {
 	if p == nil {
 		p = dl.sentinel
 	}
@@ -91,11 +40,15 @@ func (dl *DoublyLinkedList) Insert(v, p *DoublyLinkedNode) {
 	v.prev = p
 }
 
-func (dl *DoublyLinkedList) Prepend(v *DoublyLinkedNode) {
+func (dl *LinkedList) Prepend(v *LinkedNode) {
 	dl.Insert(v, nil)
 }
 
-func (dl *DoublyLinkedList) Erase(v *DoublyLinkedNode) {
+func (dl *LinkedList) Append(v *LinkedNode) {
+	dl.Insert(v, dl.getLastNode())
+}
+
+func (dl *LinkedList) Erase(v *LinkedNode) {
 	if v == nil {
 		return
 	}
@@ -108,19 +61,37 @@ func (dl *DoublyLinkedList) Erase(v *DoublyLinkedNode) {
 	}
 }
 
-func (dl *DoublyLinkedList) GetNodeByName(name string) *DoublyLinkedNode {
+func (dl *LinkedList) GetNodeByValue(val string) *LinkedNode {
 	for cur := dl.sentinel.next; cur != nil; cur = cur.next {
-		if cur.name == name {
+		if cur.value == val {
 			return cur
 		}
 	}
 	return nil
 }
 
-func (dl *DoublyLinkedList) String() string {
+func (dl *LinkedList) getNodeByKey(key string) *LinkedNode {
+	for cur := dl.sentinel.next; cur != nil; cur = cur.next {
+		if cur.key == key {
+			return cur
+		}
+	}
+	return nil
+}
+
+func (dl *LinkedList) getLastNode() *LinkedNode {
+	for cur := dl.sentinel.next; cur != nil; cur = cur.next {
+		if cur.next == nil {
+			return cur
+		}
+	}
+	return nil
+}
+
+func (dl *LinkedList) String() string {
 	var s string
 	for cur := dl.sentinel.next; cur != nil; cur = cur.next {
-		s += cur.name + " -> "
+		s += cur.value + " -> "
 	}
 	return s
 }

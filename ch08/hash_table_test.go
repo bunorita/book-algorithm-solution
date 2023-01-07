@@ -7,7 +7,7 @@ import (
 	"github.com/bunorita/book-algorithm-solution/ch08"
 )
 
-func TestHashTableSet(t *testing.T) {
+func TestHashTableAccessors(t *testing.T) {
 	t.Parallel()
 
 	tests := []*struct {
@@ -19,7 +19,7 @@ func TestHashTableSet(t *testing.T) {
 		{"yellow", "lemon"},
 		{"purple", "rain"},
 	}
-	h := ch08.NewHashTable(100)
+	h := ch08.NewHashTable(3)
 	for _, tt := range tests {
 		h.Set(tt.key, tt.want)
 	}
