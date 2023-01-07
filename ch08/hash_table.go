@@ -41,6 +41,13 @@ func (h *HashTable) Set(key, val string) {
 	h.t[h.hash(key)].Append(NewLinkedListNode(key, val))
 }
 
+func (h *HashTable) Unset(key string) {
+	lst := h.t[h.hash(key)]
+	if node := lst.getNodeByKey(key); node != nil {
+		lst.Erase(node)
+	}
+}
+
 func (h *HashTable) Get(key string) string {
 	node := h.t[h.hash(key)].getNodeByKey(key)
 	if node == nil {

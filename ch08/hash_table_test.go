@@ -46,3 +46,22 @@ func TestHashTableGetEmpty(t *testing.T) {
 		t.Errorf("got=%q, want=%q\n", got, want)
 	}
 }
+
+func TestHashTableUnset(t *testing.T) {
+	t.Parallel()
+
+	h := ch08.NewHashTable(1)
+	h.Set("red", "sun")
+	h.Set("white", "horse")
+	h.Set("black", "jacket")
+
+	h.PrintArray()
+
+	h.Unset("white")
+	want := ""
+	if got := h.Get("white"); got != want {
+		t.Errorf("got=%q, want=%q\n", got, want)
+	}
+
+	h.PrintArray()
+}
