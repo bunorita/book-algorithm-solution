@@ -105,3 +105,27 @@ func TestLinkedListGetNode(t *testing.T) {
 		})
 	}
 }
+
+func TestLinkedListSize(t *testing.T) {
+	t.Parallel()
+
+	lst := ch08.NewLinkedList("sato", "yamada", "suzuki")
+
+	testSize := func(want int) {
+		if got := lst.Size(); got != want {
+			t.Errorf("got: %d, want: %d\n", got, want)
+		}
+	}
+
+	testSize(3)
+
+	yamada := lst.GetNodeByValue("yamada")
+	suzuki := lst.GetNodeByValue("suzuki")
+	lst.Erase(yamada)
+	lst.Erase(suzuki)
+
+	testSize(1)
+
+	lst.Append(yamada)
+	testSize(2)
+}

@@ -12,22 +12,27 @@ func NewLinkedListNode(key, value string) *LinkedNode {
 
 type LinkedList struct {
 	sentinel *LinkedNode
+	size     int
 }
 
 func NewLinkedList(values ...string) *LinkedList {
-	dl := &LinkedList{
+	l := &LinkedList{
 		sentinel: &LinkedNode{},
 	}
 	for i := len(values) - 1; i >= 0; i-- {
-		dl.Prepend(&LinkedNode{value: values[i]})
+		l.Prepend(&LinkedNode{value: values[i]})
 	}
-	return dl
+	return l
+}
+
+func (l *LinkedList) Size() int {
+	return l.size
 }
 
 // insert v after p
-func (dl *LinkedList) Insert(v, p *LinkedNode) {
+func (l *LinkedList) Insert(v, p *LinkedNode) {
 	if p == nil {
-		p = dl.sentinel
+		p = l.sentinel
 	}
 	// v - p.next
 	v.next = p.next
@@ -38,17 +43,19 @@ func (dl *LinkedList) Insert(v, p *LinkedNode) {
 	// p - v
 	p.next = v
 	v.prev = p
+
+	l.size++
 }
 
-func (dl *LinkedList) Prepend(v *LinkedNode) {
-	dl.Insert(v, nil)
+func (l *LinkedList) Prepend(v *LinkedNode) {
+	l.Insert(v, nil)
 }
 
-func (dl *LinkedList) Append(v *LinkedNode) {
-	dl.Insert(v, dl.getLastNode())
+func (l *LinkedList) Append(v *LinkedNode) {
+	l.Insert(v, l.getLastNode())
 }
 
-func (dl *LinkedList) Erase(v *LinkedNode) {
+func (l *LinkedList) Erase(v *LinkedNode) {
 	if v == nil {
 		return
 	}
@@ -59,15 +66,17 @@ func (dl *LinkedList) Erase(v *LinkedNode) {
 	if v.next != nil {
 		v.next.prev = v.prev
 	}
+
+	l.size--
 }
 
-func (dl *LinkedList) GetNode(i int) *LinkedNode {
+func (l *LinkedList) GetNode(i int) *LinkedNode {
 	if i < 0 {
 		return nil
 	}
 
 	index := 0
-	for cur := dl.sentinel.next; cur != nil; cur = cur.next {
+	for cur := l.sentinel.next; cur != nil; cur = cur.next {
 		if index == i {
 			return cur
 		}
@@ -76,8 +85,8 @@ func (dl *LinkedList) GetNode(i int) *LinkedNode {
 	return nil
 }
 
-func (dl *LinkedList) GetNodeByValue(val string) *LinkedNode {
-	for cur := dl.sentinel.next; cur != nil; cur = cur.next {
+func (l *LinkedList) GetNodeByValue(val string) *LinkedNode {
+	for cur := l.sentinel.next; cur != nil; cur = cur.next {
 		if cur.value == val {
 			return cur
 		}
@@ -85,8 +94,8 @@ func (dl *LinkedList) GetNodeByValue(val string) *LinkedNode {
 	return nil
 }
 
-func (dl *LinkedList) getNodeByKey(key string) *LinkedNode {
-	for cur := dl.sentinel.next; cur != nil; cur = cur.next {
+func (l *LinkedList) getNodeByKey(key string) *LinkedNode {
+	for cur := l.sentinel.next; cur != nil; cur = cur.next {
 		if cur.key == key {
 			return cur
 		}
@@ -94,8 +103,8 @@ func (dl *LinkedList) getNodeByKey(key string) *LinkedNode {
 	return nil
 }
 
-func (dl *LinkedList) getLastNode() *LinkedNode {
-	for cur := dl.sentinel.next; cur != nil; cur = cur.next {
+func (l *LinkedList) getLastNode() *LinkedNode {
+	for cur := l.sentinel.next; cur != nil; cur = cur.next {
 		if cur.next == nil {
 			return cur
 		}
@@ -103,9 +112,9 @@ func (dl *LinkedList) getLastNode() *LinkedNode {
 	return nil
 }
 
-func (dl *LinkedList) String() string {
+func (l *LinkedList) String() string {
 	var s string
-	for cur := dl.sentinel.next; cur != nil; cur = cur.next {
+	for cur := l.sentinel.next; cur != nil; cur = cur.next {
 		s += cur.value + " -> "
 	}
 	return s
