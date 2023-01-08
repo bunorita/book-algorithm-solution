@@ -63,3 +63,54 @@ func TestCountCommonNumberPairs(t *testing.T) {
 		})
 	}
 }
+
+func TestSumEquals(t *testing.T) {
+	t.Parallel()
+
+	tests := []*struct {
+		name string
+		a, b []int
+		k    int
+		want bool
+	}{
+		{
+			name: "case1",
+			a:    []int{1, 2},
+			b:    []int{1, 2},
+			k:    1,
+			want: false,
+		},
+		{
+			name: "case2",
+			a:    []int{1, 2},
+			b:    []int{1, 2},
+			k:    3,
+			want: true,
+		},
+		{
+			name: "case3",
+			a:    []int{1, 2, 3},
+			b:    []int{4, 5, 6},
+			k:    9,
+			want: true,
+		},
+		{
+			name: "case4",
+			a:    []int{1, 2, 3},
+			b:    []int{4, 5, 6},
+			k:    10,
+			want: false,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			if got := ch08.SumEquals(tt.a, tt.b, tt.k); got != tt.want {
+				t.Errorf("got: %t, want: %t\n", got, tt.want)
+			}
+		})
+	}
+}

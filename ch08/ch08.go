@@ -38,3 +38,20 @@ func CountCommonNumberPairs(a, b []int) int {
 	}
 	return count
 }
+
+// ex 8.7
+// O(N)
+func SumEquals(a, b []int, k int) bool {
+	m := make(map[int]bool) // whether the number exists in a
+	for i := range a {      // O(N)
+		m[a[i]] = true
+	}
+
+	// ai + bj = k <=> ai = k - bj
+	for j := range b { // O(N)
+		if m[k-b[j]] {
+			return true
+		}
+	}
+	return false
+}
