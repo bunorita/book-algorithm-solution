@@ -61,6 +61,21 @@ func (dl *LinkedList) Erase(v *LinkedNode) {
 	}
 }
 
+func (dl *LinkedList) GetNode(i int) *LinkedNode {
+	if i < 0 {
+		return nil
+	}
+
+	index := 0
+	for cur := dl.sentinel.next; cur != nil; cur = cur.next {
+		if index == i {
+			return cur
+		}
+		index++
+	}
+	return nil
+}
+
 func (dl *LinkedList) GetNodeByValue(val string) *LinkedNode {
 	for cur := dl.sentinel.next; cur != nil; cur = cur.next {
 		if cur.value == val {
