@@ -3,25 +3,28 @@ package ch08
 import (
 	"errors"
 	"fmt"
+	"strconv"
 )
 
-const maxQueueSize = 100000
+type IQueue interface {
+	Enqueue(int) error
+	Dequeue() (int, error)
+	Values() []int
+}
 
-// const maxQueueSize = 5
+// const maxQueueSize = 100000
+
+const maxQueueSize = 5
+
+var _ IQueue = (*Queue)(nil)
 
 type Queue struct {
 	head, tail int
 	values     [maxQueueSize]int // ring(circular) buffer
 }
 
-func NewQueue(nums ...int) (*Queue, error) {
-	q := &Queue{}
-	for _, num := range nums {
-		if err := q.Enqueue(num); err != nil {
-			return nil, err
-		}
-	}
-	return q, nil
+func NewQueue() *Queue {
+	return &Queue{}
 }
 
 func (q *Queue) Inspect() {
@@ -67,5 +70,37 @@ func (q *Queue) Dequeue() (int, error) {
 	if q.head == maxQueueSize {
 		q.head = 0
 	}
+	return x, nil
+}
+
+var _ IQueue = (*LinkedListQueue)(nil)
+
+func NewLinkedListQueue() *LinkedListQueue {
+	return &LinkedListQueue{values: NewLinkedList()}
+}
+
+type LinkedListQueue struct {
+	values *LinkedList
+}
+
+func (q *LinkedListQueue) Values() []int {
+	size := q.values.Size()
+	values := make([]int, size)
+	for i := 0; i < size; i++ {
+		x, _ := strconv.Atoi(q.values.GetNode(i).value)
+		values[i] = x
+	}
+	return values
+}
+
+func (q *LinkedListQueue) Enqueue(x int) error {
+	q.values.Append(NewLinkedListNode("", strconv.Itoa(x)))
+	return nil
+}
+
+func (q *LinkedListQueue) Dequeue() (int, error) {
+	first := q.values.GetNode(0)
+	q.values.Erase(first)
+	x, _ := strconv.Atoi(first.value)
 	return x, nil
 }
