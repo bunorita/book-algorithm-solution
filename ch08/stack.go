@@ -2,7 +2,16 @@ package ch08
 
 import (
 	"errors"
+	"strconv"
 )
+
+type IStack interface {
+	Push(int) error
+	Pop() (int, error)
+	Values() []int
+}
+
+var _ IStack = (*Stack)(nil)
 
 const maxStackSize = 100000
 
@@ -11,14 +20,8 @@ type Stack struct {
 	top    int
 }
 
-func NewStack(nums ...int) (*Stack, error) {
-	s := &Stack{}
-	for _, num := range nums {
-		if err := s.Push(num); err != nil {
-			return nil, err
-		}
-	}
-	return s, nil
+func NewStack() *Stack {
+	return &Stack{}
 }
 
 func (s *Stack) Values() []int {
@@ -49,4 +52,36 @@ func (s *Stack) Pop() (int, error) {
 	s.values[s.top] = 0
 	s.top--
 	return s.values[s.top], nil
+}
+
+var _ IStack = (*LinkedListStack)(nil)
+
+type LinkedListStack struct {
+	values *LinkedList
+}
+
+func NewLinkedListStack() *LinkedListStack {
+	return &LinkedListStack{values: NewLinkedList()}
+}
+
+func (s *LinkedListStack) Values() []int {
+	size := s.values.Size()
+	values := make([]int, size)
+	for i := 0; i < size; i++ {
+		x, _ := strconv.Atoi(s.values.GetNode(i).value)
+		values[i] = x
+	}
+	return values
+}
+
+func (s *LinkedListStack) Push(x int) error {
+	s.values.Append(NewLinkedListNode("", strconv.Itoa(x)))
+	return nil
+}
+
+func (s *LinkedListStack) Pop() (int, error) {
+	last := s.values.getLastNode()
+	s.values.Erase(last)
+	x, _ := strconv.Atoi(last.value)
+	return x, nil
 }
