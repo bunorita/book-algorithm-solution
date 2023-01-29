@@ -10,9 +10,7 @@ func TestHeap(t *testing.T) {
 	t.Parallel()
 
 	h := ch09.NewHeap()
-	for _, x := range []int{5, 3, 7, 1} {
-		h.Push(x)
-	}
+	h.Push(5, 3, 7, 1)
 
 	got, err := h.Top()
 	if err != nil {

@@ -9,7 +9,13 @@ func NewHeap() *Heap {
 	return &Heap{}
 }
 
-func (h *Heap) Push(x int) {
+func (h *Heap) Push(nums ...int) {
+	for _, num := range nums {
+		h.push(num)
+	}
+}
+
+func (h *Heap) push(x int) {
 	*h = append(*h, x)
 
 	k := len(*h) - 1 // last index
