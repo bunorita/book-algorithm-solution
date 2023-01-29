@@ -62,3 +62,7 @@ func (h *Heap) Top() (int, error) {
 	}
 	return (*h)[0], nil
 }
+
+func (h *Heap) Array() []int {
+	return *h
+}
