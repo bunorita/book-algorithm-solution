@@ -76,3 +76,13 @@ func (uf *UnionFind) Unions() [][]int {
 	})
 	return unions
 }
+
+func (uf *UnionFind) UnionCount() int {
+	var count int
+	for i := 0; i < uf.n; i++ {
+		if uf.isRoot(i) {
+			count++
+		}
+	}
+	return count
+}

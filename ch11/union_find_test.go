@@ -50,4 +50,8 @@ func TestUnionFind(t *testing.T) {
 	if got, want := uf.IsSame(2, 5), true; got != want {
 		t.Errorf("got: %t, want: %t", got, want)
 	}
+
+	if got, want := uf.UnionCount(), 3; got != want {
+		t.Errorf("got: %d, want: %d", got, want)
+	}
 }
