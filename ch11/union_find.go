@@ -86,3 +86,8 @@ func (uf *UnionFind) UnionCount() int {
 	}
 	return count
 }
+
+// xを含む連結部分のサイズ
+func (uf *UnionFind) UnionSize(x int) int {
+	return uf.siz[uf.Root(x)]
+}
