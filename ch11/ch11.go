@@ -1,5 +1,7 @@
 package ch11
 
+import "strconv"
+
 // ex 11.1
 // https://atcoder.jp/contests/abc075/tasks/abc075_c
 func Bridge(n int, edges [][2]int) int {
@@ -80,13 +82,14 @@ func TransportNetwork(n int, roads, rails [][2]int) []int {
 		ufRail.Unite(rail[0], rail[1])
 	}
 
+	m := map[string]int{}
+	key := func(roadRt, railRt int) string { return strconv.Itoa(roadRt) + "-" + strconv.Itoa(railRt) }
+	for i := 0; i < n; i++ {
+		m[key(ufRoad.Root(i), ufRail.Root(i))]++
+	}
 	counts := make([]int, n)
 	for i := 0; i < n; i++ {
-		for j := 0; j < n; j++ {
-			if ufRoad.IsSame(i, j) && ufRail.IsSame(i, j) {
-				counts[i]++
-			}
-		}
+		counts[i] = m[key(ufRoad.Root(i), ufRail.Root(i))]
 	}
 
 	return counts
