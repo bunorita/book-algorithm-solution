@@ -28,8 +28,8 @@ func DecayedBridge(n int, edges [][2]int) []int {
 
 	// テストデータ 1-based index => 0-based へ変換
 	for i := range edges {
-		edges[i][0] -= 1
-		edges[i][1] -= 1
+		edges[i][0]--
+		edges[i][1]--
 	}
 
 	uf := NewUnionFind(n)
@@ -55,4 +55,39 @@ func DecayedBridge(n int, edges [][2]int) []int {
 	}
 
 	return inconvs
+}
+
+// ex 11.3
+// https://atcoder.jp/contests/abc049/tasks/arc065_b
+func TransportNetwork(n int, roads, rails [][2]int) []int {
+	// k, l := len(roads), len(rails)
+
+	// 1-based index => 0-based index
+	for i := range roads {
+		roads[i][0]--
+		roads[i][1]--
+	}
+	for i := range rails {
+		rails[i][0]--
+		rails[i][1]--
+	}
+
+	ufRoad, ufRail := NewUnionFind(n), NewUnionFind(n)
+	for _, road := range roads {
+		ufRoad.Unite(road[0], road[1])
+	}
+	for _, rail := range rails {
+		ufRail.Unite(rail[0], rail[1])
+	}
+
+	counts := make([]int, n)
+	for i := 0; i < n; i++ {
+		for j := 0; j < n; j++ {
+			if ufRoad.IsSame(i, j) && ufRail.IsSame(i, j) {
+				counts[i]++
+			}
+		}
+	}
+
+	return counts
 }

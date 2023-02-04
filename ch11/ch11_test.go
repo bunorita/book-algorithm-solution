@@ -122,3 +122,58 @@ func TestDecayedBridge(t *testing.T) {
 		})
 	}
 }
+
+func TestTransportNetwork(t *testing.T) {
+	t.Parallel()
+
+	tests := []*struct {
+		name  string
+		n     int
+		roads [][2]int
+		rails [][2]int
+		want  []int
+	}{
+		{
+			name: "case1",
+			n:    4,
+			roads: [][2]int{
+				{1, 2},
+				{2, 3},
+				{3, 4},
+			},
+			rails: [][2]int{
+				{2, 3},
+			},
+			want: []int{1, 2, 2, 1},
+		},
+		{
+			name: "case2",
+			n:    7,
+			roads: [][2]int{
+				{1, 2},
+				{2, 3},
+				{2, 5},
+				{6, 7},
+			},
+			rails: [][2]int{
+				{3, 5},
+				{4, 5},
+				{3, 4},
+				{6, 7},
+			},
+			want: []int{1, 1, 2, 1, 2, 2, 2},
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			got := ch11.TransportNetwork(tt.n, tt.roads, tt.rails)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("got: %v, want: %v", got, tt.want)
+			}
+		})
+	}
+}
