@@ -32,32 +32,25 @@ func mergeSort(a *[]int, left, right int) {
 	mid := (right + left) / 2
 
 	mergeSort(a, left, mid)
-	al := make([]int, mid-left)
-	copy(al, (*a)[left:mid])
-
 	mergeSort(a, mid, right)
-	ar := make([]int, right-mid)
-	copy(ar, (*a)[mid:right])
 
-	li, ri := 0, 0
+	buf := make([]int, 0)
+	for i := left; i < mid; i++ {
+		buf = append(buf, (*a)[i])
+	}
+	for i := right - 1; i >= mid; i-- { // 右側は逆順で
+		buf = append(buf, (*a)[i])
+	}
+
+	li := 0
+	ri := len(buf) - 1
 	for i := left; i < right; i++ {
-		if li == len(al) { // 左が空
-			(*a)[i] = ar[ri]
-			ri++
-			continue
-		} else if ri == len(ar) { // 右が空
-			(*a)[i] = al[li]
+		if buf[li] <= buf[ri] {
+			(*a)[i] = buf[li]
 			li++
-			continue
-		}
-
-		// 左右とも値がある
-		if al[li] <= ar[ri] { // 左の方が小さい
-			(*a)[i] = al[li]
-			li++
-		} else { // 右の方が小さい
-			(*a)[i] = ar[ri]
-			ri++
+		} else {
+			(*a)[i] = buf[ri]
+			ri--
 		}
 	}
 }
