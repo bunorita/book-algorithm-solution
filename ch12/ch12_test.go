@@ -37,8 +37,8 @@ func TestInsertionSort(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			got := ch12.InsertionSort(tt.a)
-			if !reflect.DeepEqual(got, tt.want) {
+			ch12.InsertionSort(&tt.a)
+			if got := tt.a; !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("got: %v, want: %v", got, tt.want)
 			}
 		})
@@ -70,8 +70,8 @@ func TestMergeSort(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			got := ch12.MergeSort(tt.a)
-			if !reflect.DeepEqual(got, tt.want) {
+			ch12.MergeSort(&tt.a)
+			if got := tt.a; !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("got: %v, want: %v", got, tt.want)
 			}
 		})
@@ -98,8 +98,8 @@ func TestQuickSort(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			got := ch12.QuickSort(tt.a)
-			if !reflect.DeepEqual(got, tt.want) {
+			ch12.QuickSort(&tt.a)
+			if got := tt.a; !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("got: %v, want: %v", got, tt.want)
 			}
 		})
@@ -131,8 +131,8 @@ func TestHeapSort(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			got := ch12.HeapSort(tt.a)
-			if !reflect.DeepEqual(got, tt.want) {
+			ch12.HeapSort(&tt.a)
+			if got := tt.a; !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("got: %v, want: %v", got, tt.want)
 			}
 		})

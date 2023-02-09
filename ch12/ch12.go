@@ -6,7 +6,8 @@ import (
 	"github.com/bunorita/book-algorithm-solution/ch09"
 )
 
-func InsertionSort(a []int) []int {
+func InsertionSort(ap *[]int) {
+	a := *ap
 	n := len(a)
 	for i := 1; i < n; i++ {
 		v := a[i]
@@ -22,12 +23,10 @@ func InsertionSort(a []int) []int {
 		}
 		a[j] = v
 	}
-	return a
 }
 
-func MergeSort(a []int) []int {
-	mergeSort(&a, 0, len(a))
-	return a
+func MergeSort(a *[]int) {
+	mergeSort(a, 0, len(*a))
 }
 
 func mergeSort(a *[]int, left, right int) {
@@ -61,17 +60,16 @@ func mergeSort(a *[]int, left, right int) {
 	}
 }
 
-func QuickSort(a []int) []int {
-	quickSort(&a, 0, len(a))
-	return a
+func QuickSort(ap *[]int) {
+	quickSort(ap, 0, len(*ap))
 }
 
-func quickSort(arr *[]int, left, right int) {
+func quickSort(ap *[]int, left, right int) {
 	if right-left <= 1 {
 		return
 	}
 
-	a := *arr
+	a := *ap
 
 	pi := (left + right) / 2 // pivot index
 	pivot := a[pi]
@@ -89,23 +87,22 @@ func quickSort(arr *[]int, left, right int) {
 	// swap pivot with i
 	a[i], a[right-1] = a[right-1], a[i]
 
-	quickSort(arr, left, i)
-	quickSort(arr, i+1, right)
+	quickSort(ap, left, i)
+	quickSort(ap, i+1, right)
 }
 
-func HeapSort(a []int) []int {
+func HeapSort(ap *[]int) {
+	a := *ap
 	n := len(a)
 
 	h := ch09.NewHeap()
 	h.Push(a...)
 
-	sorted := make([]int, n)
 	for i := n - 1; i >= 0; i-- { // 昇順で返すので後ろから詰める
 		x, err := h.Pop()
 		if err != nil {
 			log.Fatal(err)
 		}
-		sorted[i] = x
+		a[i] = x
 	}
-	return sorted
 }
