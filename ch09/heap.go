@@ -1,6 +1,8 @@
 package ch09
 
-import "errors"
+import (
+	"errors"
+)
 
 // Binary heap
 type Heap []int
@@ -37,28 +39,30 @@ func (h *Heap) Pop() (int, error) {
 		return 0, err
 	}
 
-	if len(*h) == 0 {
-		*h = []int{}
-	} else {
-		// remove(overwrite) top
-		imax := len(*h) - 1
-		(*h)[0] = (*h)[imax]
-		(*h) = (*h)[:imax] // remove last element
+	// remove(overwrite) top
+	imax := len(*h) - 1
+	(*h)[0] = (*h)[imax]
+	(*h) = (*h)[:imax] // remove last element
 
-		imax = len(*h) - 1 // new value
-		k := 0
-		for k != imax {
-			c := 2*k + 2           // right child
-			if (*h)[k] < (*h)[c] { // parent < child
-				(*h)[k], (*h)[c] = (*h)[c], (*h)[k] // swap parent for child
-				k = c
-			} else {
-				break
-			}
+	// h = [1,8,3,0,4]
+
+	child1 := func(k int) int { return 2*k + 1 }
+	child2 := func(k int) int { return 2*k + 2 }
+
+	k := 0
+	// c: child to swap for k(parent)
+	for c := child1(k); c < len(*h); c = child1(k) { // while child1 exists
+		if c2 := child2(k); c2 < len(*h) && (*h)[c] < (*h)[c2] { // if c2 exists & c1 value < c2 value
+			c = c2
 		}
 
+		if (*h)[k] < (*h)[c] { // parent value < child value
+			(*h)[k], (*h)[c] = (*h)[c], (*h)[k] // swap parent for child
+			k = c
+		} else {
+			break
+		}
 	}
-
 	return top, nil
 }
 
