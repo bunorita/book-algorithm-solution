@@ -1,5 +1,11 @@
 package ch12
 
+import (
+	"log"
+
+	"github.com/bunorita/book-algorithm-solution/ch09"
+)
+
 func InsertionSort(a []int) []int {
 	n := len(a)
 	for i := 1; i < n; i++ {
@@ -85,4 +91,21 @@ func quickSort(arr *[]int, left, right int) {
 
 	quickSort(arr, left, i)
 	quickSort(arr, i+1, right)
+}
+
+func HeapSort(a []int) []int {
+	n := len(a)
+
+	h := ch09.NewHeap()
+	h.Push(a...)
+
+	sorted := make([]int, n)
+	for i := n - 1; i >= 0; i-- { // 昇順で返すので後ろから詰める
+		x, err := h.Pop()
+		if err != nil {
+			log.Fatal(err)
+		}
+		sorted[i] = x
+	}
+	return sorted
 }
