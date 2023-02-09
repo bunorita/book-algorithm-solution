@@ -44,8 +44,6 @@ func (h *Heap) Pop() (int, error) {
 	(*h)[0] = (*h)[imax]
 	(*h) = (*h)[:imax] // remove last element
 
-	// h = [1,8,3,0,4]
-
 	child1 := func(k int) int { return 2*k + 1 }
 	child2 := func(k int) int { return 2*k + 2 }
 
