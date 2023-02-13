@@ -106,3 +106,44 @@ func HeapSort(ap *[]int) {
 		a[i] = x
 	}
 }
+
+// 配列それ自体をヒープにする in-place
+func HeapSort2(p *[]int) {
+	a := *p
+	n := len(a)
+
+	// aをヒープにする
+	// max parent index = (n-1)/2
+	for i := (n - 1) / 2; i >= 0; i-- {
+		heapify(p, i, n) // heapify under i
+	}
+
+	for i := n - 1; i > 0; i-- {
+		a[0], a[i] = a[i], a[0] // ヒープの最大値 a[0] を右詰めしていく
+		heapify(p, 0, i)        // ヒープサイズはiに
+	}
+}
+
+// k番目の頂点を根とする部分木について、ヒープ条件を満たすようにする
+// NOTE: a[0:n]部分についてのみ考える。 n != len(a)
+func heapify(p *[]int, k, n int) {
+	a := *p
+
+	c1 := 2*k + 1 // left child
+	if c1 >= n {  // if child1 does not exist
+		return
+	}
+
+	c := c1                      // child to swap
+	c2 := 2*k + 2                // right child
+	if c2 < n && a[c1] < a[c2] { // if c2 exists & c2 > c1
+		c = c2
+	}
+
+	if a[k] >= a[c] { // if parent > child
+		return
+	}
+
+	a[k], a[c] = a[c], a[k]
+	heapify(p, c, n)
+}
