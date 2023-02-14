@@ -147,3 +147,31 @@ func heapify(p *[]int, k, n int) {
 	a[k], a[c] = a[c], a[k]
 	heapify(p, c, n)
 }
+
+func BucketSort(p *[]int) {
+	const max = 100_000
+	a := *p
+	n := len(a)
+
+	count := make([]int, max) // count[v] 値vの個数
+	for i := range a {
+		count[a[i]]++
+	}
+
+	countLTE := make([]int, max) // countLTE[v] v以下の値の個数
+	for v := 0; v < max; v++ {
+		if v == 0 {
+			countLTE[v] = count[v]
+			continue
+		}
+		countLTE[v] = countLTE[v-1] + count[v]
+	}
+
+	sorted := make([]int, n)
+	for i := n - 1; i >= 0; i-- {
+		j := countLTE[a[i]] - 1
+		sorted[j] = a[i]
+		countLTE[a[i]]--
+	}
+	*p = sorted
+}
