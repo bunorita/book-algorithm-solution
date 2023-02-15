@@ -214,3 +214,41 @@ func TestBucketSort(t *testing.T) {
 		})
 	}
 }
+
+func TestAscOrder(t *testing.T) {
+	t.Parallel()
+
+	tests := []*struct {
+		name string
+		// aは値重複なし
+		a, want []int
+	}{
+		{
+			name: "case0",
+			a:    []int{3, 1, 2},
+			want: []int{2, 0, 1},
+		},
+		{
+			name: "case1",
+			a:    []int{5, 3, 7, 1},
+			want: []int{2, 1, 3, 0},
+		},
+		{
+			name: "case2",
+			a:    []int{10, 12, 15, 3, 8, 17, 4, 1},
+			want: []int{4, 5, 6, 1, 3, 7, 2, 0},
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			got := ch12.AscOrder(tt.a)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("got: %v, want: %v", got, tt.want)
+			}
+		})
+	}
+}

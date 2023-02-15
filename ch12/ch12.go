@@ -2,7 +2,9 @@ package ch12
 
 import (
 	"log"
+	"sort"
 
+	"github.com/bunorita/book-algorithm-solution/ch06"
 	"github.com/bunorita/book-algorithm-solution/ch09"
 )
 
@@ -174,4 +176,18 @@ func BucketSort(p *[]int) {
 		countLTE[a[i]]--
 	}
 	*p = sorted
+}
+
+func AscOrder(a []int) []int {
+	n := len(a)
+
+	sorted := make([]int, n)
+	copy(sorted, a)
+	sort.Ints(sorted)
+
+	order := make([]int, n)
+	for i := range a {
+		order[i] = ch06.LowerBound(sorted, a[i])
+	}
+	return order
 }
