@@ -178,7 +178,8 @@ func BucketSort(p *[]int) {
 	*p = sorted
 }
 
-func AscOrder(a []int) []int {
+// ex 12.1
+func AscOrderIndices(a []int) []int {
 	n := len(a)
 
 	sorted := make([]int, n)
@@ -190,4 +191,28 @@ func AscOrder(a []int) []int {
 		order[i] = ch06.LowerBound(sorted, a[i])
 	}
 	return order
+}
+
+// ex 12.2
+// https://atcoder.jp/contests/abc121/tasks/abc121_c
+// store = [price, stock_quantity]
+func EnergyDrinkCollector(stores [][2]int, m int) int {
+	// sort by price ASC
+	sort.Slice(stores, func(i, j int) bool {
+		return stores[i][0] < stores[j][0]
+	})
+
+	var totalPrice, totalNumber int
+	for _, store := range stores {
+		price, stock := store[0], store[1]
+		for stock > 0 && totalNumber < m {
+			totalPrice += price
+			totalNumber++
+			stock--
+		}
+		if totalNumber >= m {
+			break
+		}
+	}
+	return totalPrice
 }

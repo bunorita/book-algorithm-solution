@@ -215,7 +215,7 @@ func TestBucketSort(t *testing.T) {
 	}
 }
 
-func TestAscOrder(t *testing.T) {
+func TestAscOrderIndices(t *testing.T) {
 	t.Parallel()
 
 	tests := []*struct {
@@ -245,9 +245,60 @@ func TestAscOrder(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			got := ch12.AscOrder(tt.a)
+			got := ch12.AscOrderIndices(tt.a)
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("got: %v, want: %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestEnergyDrinkCollector(t *testing.T) {
+	t.Parallel()
+
+	tests := []*struct {
+		name   string
+		stores [][2]int
+		m      int
+		want   int
+	}{
+		{
+			name: "case1",
+			stores: [][2]int{
+				{4, 9},
+				{2, 4},
+			},
+			m:    5,
+			want: 12,
+		},
+		{
+			name: "case2",
+			stores: [][2]int{
+				{6, 18},
+				{2, 5},
+				{3, 10},
+				{7, 9},
+			},
+			m:    30,
+			want: 130,
+		},
+		{
+			name: "case3",
+			stores: [][2]int{
+				{1_000_000_000, 100_000},
+			},
+			m:    100_000,
+			want: 100_000_000_000_000,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			if got := ch12.EnergyDrinkCollector(tt.stores, tt.m); got != tt.want {
+				t.Errorf("got=%d, want=%d", got, tt.want)
 			}
 		})
 	}
