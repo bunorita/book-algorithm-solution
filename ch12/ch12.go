@@ -216,3 +216,42 @@ func EnergyDrinkCollector(stores [][2]int, m int) int {
 	}
 	return totalPrice
 }
+
+// ex 12.3
+func KthSmallestNumber(a []int, k int) []int {
+	n := len(a)
+	kthSmallest := make([]int, 0)
+
+	kSmallests := ch09.NewHeap() // 小さい順にk個入れる
+
+	// push k個
+	kSmallests.Push(a[:k]...)
+	kth, err := kSmallests.Top() // k番目に小さい値
+	if err != nil {
+		log.Fatalln(err)
+	}
+	kthSmallest = append(kthSmallest, kth)
+
+	// k+1個目からn個目(i=k,k+1...,n-1)
+	for i := k; i < n; i++ {
+		kth, err := kSmallests.Top() // k番目に小さい値
+		if err != nil {
+			log.Fatalln(err)
+		}
+		if a[i] < kth {
+			// 最大値を捨て代わりにa[i]を入れる
+			if _, err := kSmallests.Pop(); err != nil {
+				log.Fatalln(err)
+			}
+			kSmallests.Push(a[i])
+		}
+
+		kth, err = kSmallests.Top()
+		if err != nil {
+			log.Fatalln(err)
+		}
+		kthSmallest = append(kthSmallest, kth)
+	}
+
+	return kthSmallest
+}

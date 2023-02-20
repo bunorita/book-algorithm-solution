@@ -303,3 +303,46 @@ func TestEnergyDrinkCollector(t *testing.T) {
 		})
 	}
 }
+
+func TestKthSmallestNumber(t *testing.T) {
+	t.Parallel()
+
+	tests := []*struct {
+		name string
+		a    []int
+		k    int
+		want []int // len(want) = n-k+1
+	}{
+		{
+			name: "case1",
+			a:    []int{5, 3, 7, 1},
+			k:    1,
+			want: []int{5, 3, 3, 1},
+		},
+		{
+			name: "case2",
+			a:    []int{5, 3, 7, 1},
+			k:    2,
+			want: []int{5, 5, 3},
+		},
+		{
+			name: "case3",
+			a:    []int{5, 3, 7, 1},
+			k:    3,
+			want: []int{7, 5},
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			got := ch12.KthSmallestNumber(tt.a, tt.k)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("got: %v, want: %v\n", got, tt.want)
+			}
+
+		})
+	}
+}
