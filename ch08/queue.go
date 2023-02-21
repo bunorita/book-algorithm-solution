@@ -73,6 +73,14 @@ func (q *Queue) Dequeue() (int, error) {
 	return x, nil
 }
 
+func (q *Queue) Push(x int) error {
+	return q.Enqueue(x)
+}
+
+func (q *Queue) Pop() (int, error) {
+	return q.Dequeue()
+}
+
 var _ IQueue = (*LinkedListQueue)(nil)
 
 func NewLinkedListQueue() *LinkedListQueue {

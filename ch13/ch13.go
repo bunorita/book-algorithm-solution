@@ -5,17 +5,31 @@ import (
 	"github.com/bunorita/book-algorithm-solution/ch09"
 )
 
-func Search(g *ch09.Graph, s int) ([]bool, error) {
+func BFS(g *ch09.Graph, s int) ([]bool, error) {
+	return search(g, s, ch08.NewQueue())
+}
+
+func DFS(g *ch09.Graph, s int) ([]bool, error) {
+	return search(g, s, ch08.NewStack())
+}
+
+type set interface {
+	Push(x int) error
+	Pop() (int, error)
+	IsEmpty() bool
+}
+
+func search(g *ch09.Graph, s int, todo set) ([]bool, error) {
 	seen := make([]bool, g.Size())
-	todo := ch08.NewQueue()
+
 	// initialize
 	seen[s] = true
-	if err := todo.Enqueue(s); err != nil {
+	if err := todo.Push(s); err != nil {
 		return nil, err
 	}
 
 	for !todo.IsEmpty() {
-		v, err := todo.Dequeue()
+		v, err := todo.Pop()
 		if err != nil {
 			return nil, err
 		}
@@ -26,7 +40,7 @@ func Search(g *ch09.Graph, s int) ([]bool, error) {
 			}
 
 			seen[x] = true
-			if err := todo.Enqueue(x); err != nil {
+			if err := todo.Push(x); err != nil {
 				return nil, err
 			}
 		}

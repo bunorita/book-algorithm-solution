@@ -28,7 +28,7 @@ func (s *Stack) Values() []int {
 	return s.values[:s.top]
 }
 
-func (s *Stack) isEmpty() bool {
+func (s *Stack) IsEmpty() bool {
 	return s.top == 0
 }
 
@@ -46,7 +46,7 @@ func (s *Stack) Push(x int) error {
 }
 
 func (s *Stack) Pop() (int, error) {
-	if s.isEmpty() {
+	if s.IsEmpty() {
 		return 0, errors.New("stack is empty")
 	}
 	s.values[s.top] = 0
