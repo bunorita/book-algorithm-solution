@@ -41,7 +41,7 @@ func (q *Queue) Values() []int {
 	}
 }
 
-func (q *Queue) isEmpty() bool {
+func (q *Queue) IsEmpty() bool {
 	return q.head == q.tail
 }
 
@@ -62,7 +62,7 @@ func (q *Queue) Enqueue(x int) error {
 }
 
 func (q *Queue) Dequeue() (int, error) {
-	if q.isEmpty() {
+	if q.IsEmpty() {
 		return 0, errors.New("queue is empty")
 	}
 	x := q.values[q.head]

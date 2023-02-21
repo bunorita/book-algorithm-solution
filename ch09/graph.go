@@ -34,3 +34,11 @@ func NewGraph(n int, edges []Edge, directed bool) (*Graph, error) {
 	}
 	return &g, nil
 }
+
+func (g *Graph) VerticesConnectedWith(x int) []int {
+	return (*g)[x]
+}
+
+func (g *Graph) Size() int {
+	return len(*g)
+}
