@@ -81,3 +81,37 @@ func TestDFS(t *testing.T) {
 	}
 
 }
+
+func TestDFSr(t *testing.T) {
+	t.Parallel()
+
+	n := 8
+	g, err := ch09.NewGraph(n, []ch09.Edge{
+		{0, 5},
+		{1, 3},
+		{1, 6},
+		{2, 5},
+		{2, 7},
+		{3, 0},
+		{3, 7},
+		{4, 1},
+		{4, 2},
+		{4, 6},
+		{6, 7},
+		{7, 0},
+	}, true)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	want := make([]bool, n)
+	for i := range want {
+		want[i] = true
+	}
+
+	got := ch13.DFSr(g)
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("got: %v, want: %v\n", got, want)
+	}
+
+}
