@@ -69,3 +69,35 @@ func DFSr(g *ch09.Graph) []bool {
 	}
 	return seen
 }
+
+// by BFS
+func Distance(g *ch09.Graph, s int) ([]int, error) {
+	dist := make([]int, g.Size())
+	for i := range dist {
+		dist[i] = -1 // 「未訪問」で初期化
+	}
+	dist[s] = 0
+
+	todo := ch08.NewQueue()
+	if err := todo.Push(s); err != nil {
+		return nil, err
+	}
+
+	for !todo.IsEmpty() {
+		v, err := todo.Pop()
+		if err != nil {
+			return nil, err
+		}
+		for _, x := range g.VerticesConnectedWith(v) {
+			if dist[x] != -1 { // 探索済み
+				continue
+			}
+			dist[x] = dist[v] + 1
+			if err := todo.Push(x); err != nil {
+				return nil, err
+			}
+		}
+
+	}
+	return dist, nil
+}
