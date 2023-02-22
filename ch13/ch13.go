@@ -13,17 +13,6 @@ func DFS(g *ch09.Graph, s int) ([]bool, error) {
 	return search(g, s, ch08.NewStack())
 }
 
-func dfsr(g *ch09.Graph, v int, seen *[]bool) {
-	(*seen)[v] = true
-
-	for _, next := range g.VerticesConnectedWith(v) {
-		if (*seen)[next] {
-			continue
-		}
-		dfsr(g, next, seen)
-	}
-}
-
 type set interface {
 	Push(x int) error
 	Pop() (int, error)
@@ -70,6 +59,17 @@ func DFSr(g *ch09.Graph) []bool {
 	return seen
 }
 
+func dfsr(g *ch09.Graph, v int, seen *[]bool) {
+	(*seen)[v] = true
+
+	for _, next := range g.VerticesConnectedWith(v) {
+		if (*seen)[next] {
+			continue
+		}
+		dfsr(g, next, seen)
+	}
+}
+
 // by BFS
 func Distance(g *ch09.Graph, s int) ([]int, error) {
 	dist := make([]int, g.Size())
@@ -100,4 +100,11 @@ func Distance(g *ch09.Graph, s int) ([]int, error) {
 
 	}
 	return dist, nil
+}
+
+// code 13.4
+func PathExists(g *ch09.Graph, s, t int) bool {
+	seen := make([]bool, g.Size())
+	dfsr(g, s, &seen)
+	return seen[t]
 }

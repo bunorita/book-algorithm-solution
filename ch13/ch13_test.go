@@ -148,3 +148,73 @@ func TestDistance(t *testing.T) {
 		t.Errorf("got: %v, want: %v\n", got, want)
 	}
 }
+
+func TestPathExists(t *testing.T) {
+	t.Parallel()
+
+	n := 8
+	g, err := ch09.NewGraph(n, []ch09.Edge{
+		{0, 5},
+		{1, 3},
+		{1, 6},
+		{2, 5},
+		{2, 7},
+		{3, 0},
+		{3, 7},
+		{4, 1},
+		{4, 2},
+		{4, 6},
+		{6, 7},
+		{7, 0},
+	}, true)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	tests := []*struct {
+		name string
+		g    *ch09.Graph
+		s, t int
+		want bool
+	}{
+		{
+			name: "case1",
+			g:    g,
+			s:    6,
+			t:    5,
+			want: true,
+		},
+		{
+			name: "case2",
+			g:    g,
+			s:    3,
+			t:    6,
+			want: false,
+		},
+		{
+			name: "case3",
+			g:    g,
+			s:    4,
+			t:    0,
+			want: true,
+		},
+		{
+			name: "case4",
+			g:    g,
+			s:    0,
+			t:    4,
+			want: false,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			if got := ch13.PathExists(tt.g, tt.s, tt.t); got != tt.want {
+				t.Errorf("got: %t, want: %t", got, tt.want)
+			}
+		})
+	}
+}
