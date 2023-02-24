@@ -108,3 +108,42 @@ func PathExists(g *ch09.Graph, s, t int) bool {
 	dfsr(g, s, &seen)
 	return seen[t]
 }
+
+// code 13.5
+func IsBipartite(g *ch09.Graph) bool {
+	n := g.Size()
+	color := make([]int, n) // 0: white, 1: black, -1: 未探索
+	for i := range color {
+		color[i] = -1 // 未探索
+	}
+
+	for v := 0; v < n; v++ {
+		if color[v] != -1 {
+			continue
+		}
+		if !isBipartite(g, v, 0, &color) {
+			return false
+		}
+	}
+	return true
+}
+
+// dfs, recursive
+// cur: color of current node
+func isBipartite(g *ch09.Graph, v, cur int, color *[]int) bool {
+	(*color)[v] = cur
+	for _, next := range g.VerticesConnectedWith(v) {
+		if (*color)[next] != -1 { // 隣接頂点が既に色確定していた場合
+			// 同じ色が隣接した場合は二部グラフではない
+			if (*color)[next] == cur {
+				return false
+			}
+		} else { // 隣接頂点の色が未確定の場合
+			// 隣接頂点の色を変えて再起的に探索
+			if !isBipartite(g, next, 1-cur, color) {
+				return false
+			}
+		}
+	}
+	return true
+}

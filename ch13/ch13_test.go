@@ -218,3 +218,56 @@ func TestPathExists(t *testing.T) {
 		})
 	}
 }
+
+func TestIsBipartite(t *testing.T) {
+	t.Parallel()
+
+	tests := []*struct {
+		name      string
+		graphSize int
+		edges     []ch09.Edge
+		want      bool
+	}{
+		{
+			name:      "case1",
+			graphSize: 5,
+			edges: []ch09.Edge{
+				{0, 1},
+				{0, 3},
+				{1, 2},
+				{1, 4},
+				{3, 4},
+			},
+			want: true,
+		},
+		{
+			name:      "case2",
+			graphSize: 5,
+			edges: []ch09.Edge{
+				{0, 1},
+				{0, 3},
+				{1, 2},
+				{1, 4},
+				{3, 4},
+				{2, 4},
+			},
+			want: false,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			g, err := ch09.NewGraph(tt.graphSize, tt.edges, false)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			if got := ch13.IsBipartite(g); got != tt.want {
+				t.Errorf("got: %t, want: %t", got, tt.want)
+			}
+		})
+	}
+}
