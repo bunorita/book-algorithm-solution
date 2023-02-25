@@ -147,3 +147,36 @@ func isBipartite(g *ch09.Graph, v, cur int, color *[]int) bool {
 	}
 	return true
 }
+
+// code 13.6
+func TopologicalSort(g *ch09.Graph) []int {
+	n := g.Size()
+	seen := make([]bool, n)
+	out := make([]int, 0)
+	for v := 0; v < n; v++ {
+		if seen[v] {
+			continue
+		}
+		topologicalSort(g, v, &seen, &out)
+	}
+
+	reversed := make([]int, n)
+	for i := range out {
+		reversed[i] = out[n-1-i]
+	}
+	return reversed
+}
+
+// dfs
+func topologicalSort(g *ch09.Graph, v int, seen *[]bool, out *[]int) {
+	// fmt.Printf("%d-in\n", v)
+	(*seen)[v] = true
+	for _, next := range g.VerticesConnectedWith(v) {
+		if (*seen)[next] {
+			continue
+		}
+		topologicalSort(g, next, seen, out)
+	}
+	(*out) = append((*out), v)
+	// fmt.Printf("%d-out\n", v)
+}

@@ -271,3 +271,32 @@ func TestIsBipartite(t *testing.T) {
 		})
 	}
 }
+
+func TestTopologicalSort(t *testing.T) {
+	t.Parallel()
+
+	n := 8
+	g, err := ch09.NewGraph(n, []ch09.Edge{
+		{0, 5},
+		{1, 3},
+		{1, 6},
+		{2, 5},
+		{2, 7},
+		{3, 0},
+		{3, 7},
+		{4, 1},
+		{4, 2},
+		{4, 6},
+		{6, 7},
+		{7, 0},
+	}, true)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := []int{4, 2, 1, 6, 3, 7, 0, 5}
+	got := ch13.TopologicalSort(g)
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("got: %v, want: %v", got, want)
+	}
+
+}
