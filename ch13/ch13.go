@@ -200,3 +200,22 @@ func treeSearchDepth(tree *ch09.Graph, v, d, p int, depth *[]int) {
 		treeSearchDepth(tree, c, d+1, v, depth)
 	}
 }
+
+// code 13.9
+// treeはサイクルを持たない
+func TreeSearchSubtreeSize(tree *ch09.Graph) []int {
+	size := make([]int, tree.Size())
+	treeSearchSubtreeSize(tree, 0, -1, &size)
+	return size
+}
+
+func treeSearchSubtreeSize(tree *ch09.Graph, v, p int, size *[]int) {
+	(*size)[v] = 1
+	for _, c := range tree.VerticesConnectedWith(v) {
+		if c == p {
+			continue // 親方向への探索を防ぐ
+		}
+		treeSearchSubtreeSize(tree, c, v, size)
+		(*size)[v] += (*size)[c]
+	}
+}
