@@ -298,5 +298,34 @@ func TestTopologicalSort(t *testing.T) {
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("got: %v, want: %v", got, want)
 	}
+}
 
+func TestTreeSearchDepth(t *testing.T) {
+	t.Parallel()
+
+	tree, err := ch09.NewGraph(15, []ch09.Edge{
+		{0, 1},
+		{0, 4},
+		{0, 11},
+		{1, 2},
+		{1, 3},
+		{4, 5},
+		{4, 8},
+		{5, 6},
+		{5, 7},
+		{8, 9},
+		{8, 10},
+		{11, 12},
+		{11, 13},
+		{13, 14},
+	}, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	want := []int{0, 1, 2, 2, 1, 2, 3, 3, 2, 3, 3, 1, 2, 2, 3}
+	got := ch13.TreeSearchDepth(tree)
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("got: %v, want: %v", got, want)
+	}
 }

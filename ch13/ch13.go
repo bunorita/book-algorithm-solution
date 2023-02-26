@@ -180,3 +180,23 @@ func topologicalSort(g *ch09.Graph, v int, seen *[]bool, out *[]int) {
 	(*out) = append((*out), v)
 	// fmt.Printf("%d-out\n", v)
 }
+
+// code 13.8
+// treeはサイクルを持たない
+func TreeSearchDepth(tree *ch09.Graph) []int {
+	depth := make([]int, tree.Size())
+	treeSearchDepth(tree, 0, 0, -1, &depth)
+	return depth
+}
+
+// d: depth of node v. d = 0 if v is the root
+// p: parent node of v. p = -1 if v is the root
+func treeSearchDepth(tree *ch09.Graph, v, d, p int, depth *[]int) {
+	(*depth)[v] = d
+	for _, c := range tree.VerticesConnectedWith(v) {
+		if c == p {
+			continue // 親方向への探索を防ぐ
+		}
+		treeSearchDepth(tree, c, d+1, v, depth)
+	}
+}
