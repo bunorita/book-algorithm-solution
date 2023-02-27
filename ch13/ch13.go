@@ -103,6 +103,7 @@ func Distance(g *ch09.Graph, s int) ([]int, error) {
 }
 
 // code 13.4
+// DFS recursive
 func PathExists(g *ch09.Graph, s, t int) bool {
 	seen := make([]bool, g.Size())
 	dfsr(g, s, &seen)
@@ -244,4 +245,38 @@ func countConnectedGraph(g *ch09.Graph, v int, seen *[]bool) {
 		}
 		countConnectedGraph(g, next, seen)
 	}
+}
+
+// ex 13.2
+func PathExistsBFS(g *ch09.Graph, s, t int) (bool, error) {
+	// dist, err := Distance(g, s)
+	// if err != nil {
+	// 	return false, err
+	// }
+	// return dist[t] != -1, nil
+	// 上記でも結果同じ
+
+	seen := make([]bool, g.Size())
+	todo := ch08.NewQueue()
+	if err := todo.Push(s); err != nil {
+		return false, err
+	}
+
+	for !todo.IsEmpty() {
+		v, err := todo.Pop()
+		if err != nil {
+			return false, err
+		}
+		for _, next := range g.VerticesConnectedWith(v) {
+			if seen[next] {
+				continue
+			}
+			seen[next] = true
+			if err := todo.Push(next); err != nil {
+				return false, err
+			}
+		}
+
+	}
+	return seen[t], nil
 }

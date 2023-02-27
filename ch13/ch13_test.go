@@ -153,6 +153,7 @@ func TestDistance(t *testing.T) {
 func TestPathExists(t *testing.T) {
 	t.Parallel()
 
+	// p158 図10.4
 	n := 8
 	g, err := ch09.NewGraph(n, []ch09.Edge{
 		{0, 5},
@@ -214,7 +215,15 @@ func TestPathExists(t *testing.T) {
 			t.Parallel()
 
 			if got := ch13.PathExists(tt.g, tt.s, tt.t); got != tt.want {
-				t.Errorf("got: %t, want: %t", got, tt.want)
+				t.Errorf("DFS got: %t, want: %t", got, tt.want)
+			}
+
+			got, err := ch13.PathExistsBFS(tt.g, tt.s, tt.t)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if got != tt.want {
+				t.Errorf("BFS got: %t, want: %t", got, tt.want)
 			}
 		})
 	}
