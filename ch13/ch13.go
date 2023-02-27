@@ -219,3 +219,29 @@ func treeSearchSubtreeSize(tree *ch09.Graph, v, p int, size *[]int) {
 		(*size)[v] += (*size)[c]
 	}
 }
+
+// ex 13.1
+// DFS recursive
+func CountConnectedGraph(g *ch09.Graph) int {
+	var count int
+	n := g.Size()
+	seen := make([]bool, n)
+	for v := 0; v < n; v++ {
+		if seen[v] {
+			continue
+		}
+		countConnectedGraph(g, v, &seen)
+		count++
+	}
+	return count
+}
+
+func countConnectedGraph(g *ch09.Graph, v int, seen *[]bool) {
+	(*seen)[v] = true
+	for _, next := range g.VerticesConnectedWith(v) {
+		if (*seen)[next] {
+			continue
+		}
+		countConnectedGraph(g, next, seen)
+	}
+}

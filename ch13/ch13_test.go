@@ -358,3 +358,61 @@ func TestTreeSearchSubtreeSize(t *testing.T) {
 	got := ch13.TreeSearchSubtreeSize(tree)
 	util.TestDiff(t, got, want)
 }
+
+func TestCountConnectedGraph(t *testing.T) {
+	t.Parallel()
+
+	tests := []*struct {
+		name  string
+		n     int
+		edges []ch09.Edge
+		want  int
+	}{
+		{
+			name:  "case1",
+			n:     1,
+			edges: []ch09.Edge{},
+			want:  1,
+		},
+		{
+			name:  "case2",
+			n:     2,
+			edges: []ch09.Edge{},
+			want:  2,
+		},
+		{
+			name: "case3",
+			n:    2,
+			edges: []ch09.Edge{
+				{0, 1},
+			},
+			want: 1,
+		},
+		{
+			name: "case4",
+			n:    7,
+			edges: []ch09.Edge{
+				{1, 2},
+				{1, 3},
+				{5, 6},
+			},
+			want: 4,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			g, err := ch09.NewGraph(tt.n, tt.edges, false)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if got := ch13.CountConnectedGraph(g); got != tt.want {
+				t.Errorf("got: %d, want: %d", got, tt.want)
+			}
+		})
+	}
+
+}
