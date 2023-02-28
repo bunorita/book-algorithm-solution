@@ -111,6 +111,7 @@ func PathExists(g *ch09.Graph, s, t int) bool {
 }
 
 // code 13.5
+// DFS recursive
 func IsBipartite(g *ch09.Graph) bool {
 	n := g.Size()
 	color := make([]int, n) // 0: white, 1: black, -1: 未探索
@@ -279,4 +280,56 @@ func PathExistsBFS(g *ch09.Graph, s, t int) (bool, error) {
 
 	}
 	return seen[t], nil
+}
+
+// ex 13.3
+func IsBipartiteBFS(g *ch09.Graph) (bool, error) {
+	n := g.Size()
+	color := make([]int, n) // black: 1, white: 0, 未探索: -1
+	for i := range color {
+		color[i] = -1
+	}
+
+	todo := ch08.NewQueue()
+	for v := 0; v < n; v++ {
+		if color[v] != -1 {
+			continue
+		}
+		result, err := isBipartiteBFS(g, todo, v, &color)
+		if err != nil {
+			return false, err
+		}
+		if !result {
+			return false, nil
+		}
+	}
+	return true, nil
+}
+
+func isBipartiteBFS(g *ch09.Graph, todo *ch08.Queue, s int, color *[]int) (bool, error) {
+	(*color)[s] = 0
+	if err := todo.Push(s); err != nil {
+		return false, err
+	}
+
+	for !todo.IsEmpty() {
+		v, err := todo.Pop()
+		if err != nil {
+			return false, err
+		}
+		for _, next := range g.VerticesConnectedWith(v) {
+			if (*color)[next] != -1 { // 隣接頂点が色確定している場合
+				if (*color)[next] == (*color)[v] {
+					return false, nil
+				}
+				continue
+			}
+			// 隣接頂点の色が未確定の場合
+			(*color)[next] = 1 - (*color)[v] // 逆の色にする
+			if err := todo.Push(next); err != nil {
+				return false, err
+			}
+		}
+	}
+	return true, nil
 }

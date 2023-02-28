@@ -276,7 +276,15 @@ func TestIsBipartite(t *testing.T) {
 			}
 
 			if got := ch13.IsBipartite(g); got != tt.want {
-				t.Errorf("got: %t, want: %t", got, tt.want)
+				t.Errorf("DFS got: %t, want: %t", got, tt.want)
+			}
+
+			got, err := ch13.IsBipartiteBFS(g)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if got != tt.want {
+				t.Errorf("BFS got: %t, want: %t", got, tt.want)
 			}
 		})
 	}
