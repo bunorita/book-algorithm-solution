@@ -431,5 +431,33 @@ func TestCountConnectedGraph(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestShortestPathOfMaze(t *testing.T) {
+	t.Parallel()
+
+	maze := `
+.#....#G
+.#.#....
+...#.##.
+#.##...#
+...###.#
+.#.....#
+...#.#..
+S.......
+`
+	// o -- y (w)
+	// |
+	// |
+	// x (h)
+
+	want := 16 // steps
+	got, err := ch13.ShortestPathOfMaze(8, 8, maze)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got != want {
+		t.Errorf("got: %d, want: %d", got, want)
+	}
 
 }

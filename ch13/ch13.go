@@ -1,12 +1,14 @@
 package ch13
 
 import (
+	"strings"
+
 	"github.com/bunorita/book-algorithm-solution/ch08"
 	"github.com/bunorita/book-algorithm-solution/ch09"
 )
 
 func BFS(g *ch09.Graph, s int) ([]bool, error) {
-	return search(g, s, ch08.NewQueue())
+	return search(g, s, ch08.NewQueue[int]())
 }
 
 func DFS(g *ch09.Graph, s int) ([]bool, error) {
@@ -78,7 +80,7 @@ func Distance(g *ch09.Graph, s int) ([]int, error) {
 	}
 	dist[s] = 0
 
-	todo := ch08.NewQueue()
+	todo := ch08.NewQueue[int]()
 	if err := todo.Push(s); err != nil {
 		return nil, err
 	}
@@ -258,7 +260,7 @@ func PathExistsBFS(g *ch09.Graph, s, t int) (bool, error) {
 	// 上記でも結果同じ
 
 	seen := make([]bool, g.Size())
-	todo := ch08.NewQueue()
+	todo := ch08.NewQueue[int]()
 	if err := todo.Push(s); err != nil {
 		return false, err
 	}
@@ -290,7 +292,7 @@ func IsBipartiteBFS(g *ch09.Graph) (bool, error) {
 		color[i] = -1
 	}
 
-	todo := ch08.NewQueue()
+	todo := ch08.NewQueue[int]()
 	for v := 0; v < n; v++ {
 		if color[v] != -1 {
 			continue
@@ -306,7 +308,7 @@ func IsBipartiteBFS(g *ch09.Graph) (bool, error) {
 	return true, nil
 }
 
-func isBipartiteBFS(g *ch09.Graph, todo *ch08.Queue, s int, color *[]int) (bool, error) {
+func isBipartiteBFS(g *ch09.Graph, todo *ch08.Queue[int], s int, color *[]int) (bool, error) {
 	(*color)[s] = 0
 	if err := todo.Push(s); err != nil {
 		return false, err
@@ -332,4 +334,81 @@ func isBipartiteBFS(g *ch09.Graph, todo *ch08.Queue, s int, color *[]int) (bool,
 		}
 	}
 	return true, nil
+}
+
+// ex 13.4
+// BFS
+func ShortestPathOfMaze(h, w int, maze string) (int, error) {
+	// field: h*w
+	field := make([][]rune, h)
+	for i := range field {
+		field[i] = make([]rune, w)
+	}
+
+	sx, sy, gx, gy := -1, -1, -1, -1 // coordinate of start & goal
+	maze = strings.Trim(maze, "\n")
+	for i, line := range strings.Split(maze, "\n") {
+		for j, c := range line {
+			field[i][j] = c
+			if c == 'S' {
+				sx, sy = i, j
+			} else if c == 'G' {
+				gx, gy = i, j
+			}
+		}
+	}
+
+	type node [2]int
+	que := ch08.NewQueue[node]()
+	if err := que.Push(node{sx, sy}); err != nil {
+		return 0, err
+	}
+
+	dist := make([][]int, h) // dist[i][j] は(i,j)への最短路長
+	for i := range dist {
+		dist[i] = make([]int, w)
+		for j := range dist[i] {
+			dist[i][j] = -1
+		}
+	}
+	dist[sx][sy] = 0
+
+	// 上下左右の動きを表すベクトル
+	directions := [4][2]int{{1, 0}, {-1, 0}, {0, 1}, {0, -1}}
+
+	for !que.IsEmpty() {
+		cur, err := que.Pop()
+		if err != nil {
+			return 0, err
+		}
+		x, y := cur[0], cur[1]
+		// 隣接頂点（上下左右）を順に見ていく
+		for _, dir := range directions {
+			nx := x + dir[0]
+			ny := y + dir[1]
+
+			// field外はスキップ
+			if nx < 0 || nx >= h || ny < 0 || ny >= w {
+				continue
+			}
+			// 壁内はスキップ
+			if field[nx][ny] == '#' {
+				continue
+			}
+
+			// 次のnodeが未探索ならば
+			if dist[nx][ny] == -1 {
+				dist[nx][ny] = dist[x][y] + 1 // 次nodeへの距離 = 現在のnodeへの距離 + 1
+				if err := que.Push(node{nx, ny}); err != nil {
+					return 0, err
+				}
+			}
+		}
+	}
+
+	// for i := range dist {
+	// 	fmt.Println(dist[i])
+	// }
+
+	return dist[gx][gy], nil
 }

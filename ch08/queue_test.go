@@ -12,9 +12,9 @@ func TestQueue(t *testing.T) {
 
 	tests := []*struct {
 		name string
-		q    ch08.IQueue
+		q    ch08.IQueue[int]
 	}{
-		{name: "by array", q: ch08.NewQueue()},
+		{name: "by array", q: ch08.NewQueue[int]()},
 		{name: "by linked list", q: ch08.NewLinkedListQueue()},
 	}
 

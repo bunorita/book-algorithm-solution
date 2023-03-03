@@ -6,50 +6,50 @@ import (
 	"strconv"
 )
 
-type IQueue interface {
-	Enqueue(int) error
-	Dequeue() (int, error)
-	Values() []int
+type IQueue[T any] interface {
+	Enqueue(T) error
+	Dequeue() (T, error)
+	Values() []T
 }
 
 // const maxQueueSize = 100000
 
-const maxQueueSize = 5
+const maxQueueSize = 10
 
-var _ IQueue = (*Queue)(nil)
+var _ IQueue[int] = (*Queue[int])(nil)
 
-type Queue struct {
+type Queue[T any] struct {
 	head, tail int
-	values     [maxQueueSize]int // ring(circular) buffer
+	values     [maxQueueSize]T // ring(circular) buffer
 }
 
-func NewQueue() *Queue {
-	return &Queue{}
+func NewQueue[T any]() *Queue[T] {
+	return &Queue[T]{}
 }
 
-func (q *Queue) Inspect() {
+func (q *Queue[T]) Inspect() {
 	fmt.Printf("head=%d, tail=%d, values=%v\n", q.head, q.tail, q.values)
 }
 
-func (q *Queue) Values() []int {
+func (q *Queue[T]) Values() []T {
 	if q.head < q.tail {
 		return q.values[q.head:q.tail]
 	} else {
-		front := make([]int, maxQueueSize-q.head)
+		front := make([]T, maxQueueSize-q.head)
 		copy(front, q.values[q.head:]) // Not to overwrite q.values
 		return append(front, q.values[:q.tail]...)
 	}
 }
 
-func (q *Queue) IsEmpty() bool {
+func (q *Queue[T]) IsEmpty() bool {
 	return q.head == q.tail
 }
 
-func (q *Queue) isFull() bool {
+func (q *Queue[T]) isFull() bool {
 	return (q.tail+1)%maxQueueSize == q.head
 }
 
-func (q *Queue) Enqueue(x int) error {
+func (q *Queue[T]) Enqueue(x T) error {
 	if q.isFull() {
 		return errors.New("queue is full")
 	}
@@ -61,9 +61,9 @@ func (q *Queue) Enqueue(x int) error {
 	return nil
 }
 
-func (q *Queue) Dequeue() (int, error) {
+func (q *Queue[T]) Dequeue() (T, error) {
 	if q.IsEmpty() {
-		return 0, errors.New("queue is empty")
+		return *new(T), errors.New("queue is empty")
 	}
 	x := q.values[q.head]
 	q.head++
@@ -73,15 +73,15 @@ func (q *Queue) Dequeue() (int, error) {
 	return x, nil
 }
 
-func (q *Queue) Push(x int) error {
+func (q *Queue[T]) Push(x T) error {
 	return q.Enqueue(x)
 }
 
-func (q *Queue) Pop() (int, error) {
+func (q *Queue[T]) Pop() (T, error) {
 	return q.Dequeue()
 }
 
-var _ IQueue = (*LinkedListQueue)(nil)
+var _ IQueue[int] = (*LinkedListQueue)(nil)
 
 func NewLinkedListQueue() *LinkedListQueue {
 	return &LinkedListQueue{values: NewLinkedList()}
