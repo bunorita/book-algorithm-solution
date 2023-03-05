@@ -58,10 +58,29 @@ func TestNewGraph(t *testing.T) {
 }
 
 func TestBellmanFord(t *testing.T) {
-	t.Skip()
-	// t.Parallel()
+	t.Parallel()
 
-	// want := []int{0, 3, 53, 24, -1, 7}
-	// got := ch14.BellmanFord()
-	// util.TestDiff(t, got, want)
+	g, err := ch14.NewGraph(6, [][3]int{
+		{0, 1, 3},
+		{0, 3, 100},
+		{1, 2, 50},
+		{1, 3, 57},
+		{1, 4, -4},
+		{2, 3, -10},
+		{2, 5, 100},
+		{3, 1, -5},
+		{4, 2, 57},
+		{4, 3, 25},
+		{4, 5, 8},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	want := []int{0, 3, 53, 24, -1, 7}
+	got, err := ch14.BellmanFord(g, 0)
+	if err != nil {
+		t.Fatal(err)
+	}
+	util.TestDiff(t, got, want)
 }

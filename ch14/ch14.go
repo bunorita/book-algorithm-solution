@@ -1,13 +1,11 @@
 package ch14
 
 import (
+	"errors"
 	"fmt"
+	"math"
 	"sort"
 )
-
-func BellmanFord() []int {
-	return []int{}
-}
 
 // directed & weighted graph
 type Graph [][]Edge
@@ -41,4 +39,43 @@ func NewGraph(n int, edges [][3]int) (*Graph, error) {
 	}
 
 	return &g, nil
+}
+
+func BellmanFord(g *Graph, s int) ([]int, error) {
+	n := len(*g)
+	dist := make([]int, n)
+	for i := range dist { // initialize
+		dist[i] = math.MaxInt
+	}
+	dist[s] = 0
+
+	for i := 0; i < n; i++ {
+		var updated bool
+		for v := 0; v < n; v++ {
+			if dist[v] == math.MaxInt {
+				continue
+			}
+			for _, edge := range (*g)[v] {
+				if chmin(&dist[edge.To], dist[v]+edge.W) {
+					updated = true
+				}
+			}
+		}
+
+		if !updated { // 更新がなければ既に最短路が求められている
+			break
+		}
+		if i == n-1 { // n回目反復で更新があれば負閉路を持つ
+			return nil, errors.New("negative cycle exists")
+		}
+	}
+	return dist, nil
+}
+
+func chmin(a *int, b int) bool {
+	if (*a) > b {
+		*a = b
+		return true
+	}
+	return false
 }
