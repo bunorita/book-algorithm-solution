@@ -50,14 +50,16 @@ func BellmanFord(g *Graph, s int) ([]int, error) {
 	dist[s] = 0
 
 	for i := 0; i < n; i++ {
+		fmt.Printf("iteration %d\n", i)
 		var updated bool
 		for v := 0; v < n; v++ {
-			if dist[v] == math.MaxInt {
+			if dist[v] == math.MaxInt { // vは始点sから到達できない
 				continue
 			}
 			for _, edge := range (*g)[v] {
 				if chmin(&dist[edge.To], dist[v]+edge.W) {
 					updated = true
+					fmt.Printf("	relaxation (%d => %d) %d\n", v, edge.To, dist[edge.To])
 				}
 			}
 		}
