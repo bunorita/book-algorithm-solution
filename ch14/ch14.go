@@ -81,3 +81,38 @@ func chmin(a *int, b int) bool {
 	}
 	return false
 }
+
+// 14.3
+func Dijkstra(g *Graph, s int) []int {
+	n := len(*g)
+	used := make([]bool, n)
+	dist := make([]int, n)
+	for i := range dist {
+		dist[i] = math.MaxInt
+	}
+	dist[s] = 0
+	for i := 0; i < n; i++ {
+		fmt.Printf("iteration %d\n", i)
+		// 未使用の頂点の内、dist値が最小の頂点を探す
+		minDist := math.MaxInt
+		minDistV := -1
+		for v := 0; v < n; v++ {
+			if !used[v] && dist[v] < minDist {
+				minDist = dist[v]
+				minDistV = v
+			}
+		}
+		// そのような頂点がなければ終了
+		if minDistV == -1 {
+			break
+		}
+
+		// minDistVを始点として各辺を緩和する
+		for _, edge := range (*g)[minDistV] {
+			chmin(&dist[edge.To], dist[minDistV]+edge.W)
+			fmt.Printf("	relaxation (%d => %d) %d\n", minDistV, edge.To, dist[edge.To])
+		}
+		used[minDistV] = true
+	}
+	return dist
+}
