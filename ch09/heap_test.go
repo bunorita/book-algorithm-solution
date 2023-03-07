@@ -1,16 +1,14 @@
-package ch09_test
+package ch09
 
 import (
 	"reflect"
 	"testing"
-
-	"github.com/bunorita/book-algorithm-solution/ch09"
 )
 
 func TestHeap(t *testing.T) {
 	t.Parallel()
 
-	h := ch09.NewHeap()
+	h := NewIntHeap()
 	h.Push(5, 3, 7, 1)
 
 	got, err := h.Top()
@@ -53,22 +51,22 @@ func TestHeapPush(t *testing.T) {
 	tests := []*struct {
 		name string
 		a    []int
-		want *ch09.Heap
+		want []int
 	}{
 		{
 			name: "case0", // 要素数 奇数
 			a:    []int{5, 3, 1},
-			want: &ch09.Heap{5, 3, 1},
+			want: []int{5, 3, 1},
 		},
 		{
 			name: "case1", // 要素数 偶数
 			a:    []int{5, 3, 7, 1},
-			want: &ch09.Heap{7, 3, 5, 1},
+			want: []int{7, 3, 5, 1},
 		},
 		{
 			name: "case2",
 			a:    []int{10, 0, 3, 8, 4, 1},
-			want: &ch09.Heap{10, 8, 3, 0, 4, 1},
+			want: []int{10, 8, 3, 0, 4, 1},
 		},
 	}
 
@@ -77,10 +75,10 @@ func TestHeapPush(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			h := ch09.NewHeap()
+			h := NewIntHeap()
 			h.Push(tt.a...)
 
-			if got := h; !reflect.DeepEqual(got, tt.want) {
+			if got := h.Array(); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("got: %v, want: %v", got, tt.want)
 			}
 		})
@@ -90,24 +88,27 @@ func TestHeapPush(t *testing.T) {
 func TestHeapPop(t *testing.T) {
 	t.Parallel()
 
+	less := func(x, y int) bool { return x < y }
+
 	tests := []*struct {
-		name    string
-		h, want *ch09.Heap
+		name string
+		h    *Heap[int]
+		want []int
 	}{
 		{
 			name: "case0",
-			h:    &ch09.Heap{5, 3, 1},
-			want: &ch09.Heap{3, 1},
+			h:    &Heap[int]{arr: []int{5, 3, 1}, less: less},
+			want: []int{3, 1},
 		},
 		{
 			name: "case1",
-			h:    &ch09.Heap{7, 3, 5, 1},
-			want: &ch09.Heap{5, 3, 1},
+			h:    &Heap[int]{arr: []int{7, 3, 5, 1}, less: less},
+			want: []int{5, 3, 1},
 		},
 		{
 			name: "case2",
-			h:    &ch09.Heap{10, 8, 3, 0, 4, 1},
-			want: &ch09.Heap{8, 4, 3, 0, 1},
+			h:    &Heap[int]{arr: []int{10, 8, 3, 0, 4, 1}, less: less},
+			want: []int{8, 4, 3, 0, 1},
 		},
 	}
 
@@ -116,7 +117,7 @@ func TestHeapPop(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			popWant := (*tt.h)[0]
+			popWant := tt.h.Array()[0]
 			popGot, err := tt.h.Pop()
 			if err != nil {
 				t.Fatal(err)
@@ -125,7 +126,7 @@ func TestHeapPop(t *testing.T) {
 				t.Errorf("got=%d, want=%d\n", popGot, popWant)
 			}
 
-			if got := tt.h; !reflect.DeepEqual(got, tt.want) {
+			if got := tt.h.Array(); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("got: %v, want: %v", got, tt.want)
 			}
 		})

@@ -97,7 +97,7 @@ func HeapSort(ap *[]int) {
 	a := *ap
 	n := len(a)
 
-	h := ch09.NewHeap()
+	h := ch09.NewIntHeap()
 	h.Push(a...)
 
 	for i := n - 1; i >= 0; i-- { // 昇順で返すので後ろから詰める
@@ -222,7 +222,7 @@ func KthSmallestNumber(a []int, k int) []int {
 	n := len(a)
 	kthSmallest := make([]int, 0)
 
-	kSmallests := ch09.NewHeap() // 小さい順にk個入れる
+	kSmallests := ch09.NewIntHeap() // 小さい順にk個入れる
 
 	// push k個
 	kSmallests.Push(a[:k]...)
