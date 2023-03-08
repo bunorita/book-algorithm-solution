@@ -8,7 +8,7 @@ import (
 func TestHeap(t *testing.T) {
 	t.Parallel()
 
-	h := NewIntHeap()
+	h := NewIntMaxHeap()
 	h.Push(5, 3, 7, 1)
 
 	got, err := h.Top()
@@ -75,7 +75,7 @@ func TestHeapPush(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			h := NewIntHeap()
+			h := NewIntMaxHeap()
 			h.Push(tt.a...)
 
 			if got := h.Array(); !reflect.DeepEqual(got, tt.want) {
@@ -88,7 +88,7 @@ func TestHeapPush(t *testing.T) {
 func TestHeapPop(t *testing.T) {
 	t.Parallel()
 
-	less := func(x, y int) bool { return x < y }
+	cond := func(p, c int) bool { return p >= c }
 
 	tests := []*struct {
 		name string
@@ -97,17 +97,17 @@ func TestHeapPop(t *testing.T) {
 	}{
 		{
 			name: "case0",
-			h:    &Heap[int]{arr: []int{5, 3, 1}, less: less},
+			h:    &Heap[int]{arr: []int{5, 3, 1}, cond: cond},
 			want: []int{3, 1},
 		},
 		{
 			name: "case1",
-			h:    &Heap[int]{arr: []int{7, 3, 5, 1}, less: less},
+			h:    &Heap[int]{arr: []int{7, 3, 5, 1}, cond: cond},
 			want: []int{5, 3, 1},
 		},
 		{
 			name: "case2",
-			h:    &Heap[int]{arr: []int{10, 8, 3, 0, 4, 1}, less: less},
+			h:    &Heap[int]{arr: []int{10, 8, 3, 0, 4, 1}, cond: cond},
 			want: []int{8, 4, 3, 0, 1},
 		},
 	}
@@ -130,5 +130,45 @@ func TestHeapPop(t *testing.T) {
 				t.Errorf("got: %v, want: %v", got, tt.want)
 			}
 		})
+	}
+}
+
+func TestMinHeap(t *testing.T) {
+	t.Parallel()
+
+	h := NewIntMinHeap()
+	h.Push(5, 3, 7, 1)
+
+	got, err := h.Top()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if want := 1; got != want {
+		t.Errorf("got=%d, want=%d", got, want)
+	}
+
+	got, err = h.Pop()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if want := 1; got != want {
+		t.Errorf("got=%d, want=%d", got, want)
+	}
+
+	got, err = h.Top()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if want := 3; got != want {
+		t.Errorf("got=%d, want=%d", got, want)
+	}
+
+	h.Push(2)
+	got, err = h.Top()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if want := 2; got != want {
+		t.Errorf("got=%d, want=%d", got, want)
 	}
 }
