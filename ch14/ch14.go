@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"math"
 	"sort"
+
+	"github.com/bunorita/book-algorithm-solution/ch09"
 )
 
 // directed & weighted graph
@@ -115,4 +117,43 @@ func Dijkstra(g *Graph, s int) []int {
 		used[minDistV] = true
 	}
 	return dist
+}
+
+// 14.4
+func DijkstraByHeap(g *Graph, s int) ([]int, error) {
+	dist := make([]int, len(*g))
+	for i := range dist {
+		dist[i] = math.MaxInt
+	}
+	dist[s] = 0
+
+	type pair struct{ v, d int } // {v, dist[v]}
+	// Min Heap. dist[v]が最小のものを取り出せる
+	h := ch09.NewHeap(func(p, c pair) bool { return p.d <= c.d })
+	h.Push(pair{v: 0, d: dist[0]})
+
+	for !h.IsEmpty() {
+		// v: 使用済みでない頂点のうちdist[v]が最小の頂点
+		// d: vに対するキー値 dist[v]
+		top, err := h.Pop()
+		if err != nil {
+			return nil, err
+		}
+		v, d := top.v, top.d
+		fmt.Printf("v: %d, d: %d\n", v, d)
+		if d > dist[v] { // 複数回緩和で最小でなくなった値dは無視
+			continue
+		}
+
+		for _, edge := range (*g)[v] {
+			to := edge.To
+			if chmin(&dist[to], dist[v]+edge.W) {
+				fmt.Printf("    to: %d, dist: %d\n", to, dist[to])
+				h.Push(pair{v: to, d: dist[to]})
+			}
+
+		}
+	}
+
+	return dist, nil
 }

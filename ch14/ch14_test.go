@@ -155,8 +155,22 @@ func TestDijkstra(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-
 	want := []int{0, 3, 5, 14, 9, 16}
-	got := ch14.Dijkstra(g, 0)
-	util.TestDiff(t, got, want)
+
+	t.Run("simple", func(t *testing.T) {
+		t.Parallel()
+
+		got := ch14.Dijkstra(g, 0)
+		util.TestDiff(t, got, want)
+	})
+
+	t.Run("heap", func(t *testing.T) {
+		t.Parallel()
+
+		got, err := ch14.DijkstraByHeap(g, 0)
+		if err != nil {
+			t.Fatal(err)
+		}
+		util.TestDiff(t, got, want)
+	})
 }

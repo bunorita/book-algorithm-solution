@@ -76,10 +76,14 @@ func (h *Heap[T]) Pop() (T, error) {
 }
 
 func (h *Heap[T]) Top() (T, error) {
-	if len(h.arr) == 0 {
+	if h.IsEmpty() {
 		return *new(T), errors.New("empty heap")
 	}
 	return h.arr[0], nil
+}
+
+func (h *Heap[T]) IsEmpty() bool {
+	return len(h.arr) == 0
 }
 
 func (h *Heap[T]) Array() []T {
