@@ -7,6 +7,7 @@ import (
 	"sort"
 
 	"github.com/bunorita/book-algorithm-solution/ch09"
+	"github.com/bunorita/book-algorithm-solution/intutil"
 )
 
 // directed & weighted graph
@@ -156,4 +157,46 @@ func DijkstraByHeap(g *Graph, s int) ([]int, error) {
 	}
 
 	return dist, nil
+}
+
+// 14.5 Floyd-Warshall algorithm
+// https://atcoder.jp/contests/abc208/tasks/abc208_d
+func ShortestPathQueries2(n int, edges [][3]int) (int, error) {
+	dp := make([][]int, n)
+	const inf = math.MaxInt
+	for i := range dp {
+		dp[i] = make([]int, n)
+		for j := range dp[i] {
+			dp[i][j] = inf
+		}
+	}
+
+	// dp初期条件
+	for _, edge := range edges {
+		a, b, w := edge[0], edge[1], edge[2]
+		dp[a][b] = w
+	}
+	for v := 0; v < n; v++ {
+		dp[v][v] = 0
+	}
+
+	var result int
+	for k := 0; k < n; k++ {
+		for i := 0; i < n; i++ {
+			for j := 0; j < n; j++ {
+				chmin(&dp[i][j], intutil.SafeAdd(dp[i][k], dp[k][j]))
+				if dp[i][j] < inf {
+					result += dp[i][j]
+				}
+			}
+		}
+	}
+
+	for v := 0; v < n; v++ {
+		if dp[v][v] < 0 {
+			return 0, errors.New("negative cycle exists")
+		}
+	}
+
+	return result, nil
 }

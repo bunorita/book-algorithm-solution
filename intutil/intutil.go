@@ -33,3 +33,16 @@ func Chmax(a *int, b int) {
 		*a = b
 	}
 }
+
+// prevent overflows
+func SafeAdd(a, b int) int {
+	if a >= 0 && b >= 0 &&
+		math.MaxInt-a < b { // overflow: MaxInt < a+b
+		return math.MaxInt
+	}
+	if a < 0 && b < 0 &&
+		a < math.MinInt-b { // overflow: a+b < MinInt
+		return math.MinInt
+	}
+	return a + b
+}

@@ -174,3 +174,78 @@ func TestDijkstra(t *testing.T) {
 		util.TestDiff(t, got, want)
 	})
 }
+
+func TestShortestPathQueries2(t *testing.T) {
+	t.Parallel()
+
+	tests := []*struct {
+		name  string
+		n     int
+		edges [][3]int
+		want  int
+	}{
+		{
+			name: "case1",
+			n:    3,
+			edges: [][3]int{
+				{1, 2, 3},
+				{2, 3, 2},
+			},
+			want: 25,
+		},
+		{
+			name:  "case2",
+			n:     3,
+			edges: [][3]int{},
+			want:  0,
+		},
+		{
+			name: "case3",
+			n:    5,
+			edges: [][3]int{
+				{1, 2, 6},
+				{1, 3, 10},
+				{1, 4, 4},
+				{1, 5, 1},
+				{2, 1, 5},
+				{2, 3, 9},
+				{2, 4, 8},
+				{2, 5, 6},
+				{3, 1, 5},
+				{3, 2, 1},
+				{3, 4, 7},
+				{3, 5, 9},
+				{4, 1, 4},
+				{4, 2, 6},
+				{4, 3, 4},
+				{4, 5, 8},
+				{5, 1, 2},
+				{5, 2, 5},
+				{5, 3, 6},
+				{5, 4, 5},
+			},
+			want: 517,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			// 1-based => 0-based indexing
+			for i := range tt.edges {
+				tt.edges[i][0]--
+				tt.edges[i][1]--
+			}
+
+			got, err := ch14.ShortestPathQueries2(tt.n, tt.edges)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if got != tt.want {
+				t.Errorf("got: %d, want: %d", got, tt.want)
+			}
+		})
+	}
+}
