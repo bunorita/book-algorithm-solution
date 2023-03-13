@@ -249,3 +249,73 @@ func TestShortestPathQueries2(t *testing.T) {
 		})
 	}
 }
+
+func TestLongestPath(t *testing.T) {
+	t.Parallel()
+
+	tests := []*struct {
+		name  string
+		n     int
+		edges [][2]int
+		want  int
+	}{
+		{
+			name: "case1",
+			n:    4,
+			edges: [][2]int{
+				{1, 2},
+				{1, 3},
+				{3, 2},
+				{2, 4},
+				{3, 4},
+			},
+			want: 3,
+		},
+		{
+			name: "case2",
+			n:    6,
+			edges: [][2]int{
+				{2, 3},
+				{4, 5},
+				{5, 6},
+			},
+			want: 2,
+		},
+		{
+			name: "case3",
+			n:    5,
+			edges: [][2]int{
+				{5, 3},
+				{2, 3},
+				{2, 4},
+				{5, 2},
+				{5, 1},
+				{1, 4},
+				{4, 3},
+				{1, 3},
+			},
+			want: 3,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			// 1-based => 0-based index
+			for i := range tt.edges {
+				tt.edges[i][0]--
+				tt.edges[i][1]--
+			}
+
+			got, err := ch14.LongestPath(tt.n, tt.edges)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if got != tt.want {
+				t.Errorf("got: %d, want: %d", got, tt.want)
+			}
+		})
+	}
+}

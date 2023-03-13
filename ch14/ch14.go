@@ -200,3 +200,38 @@ func ShortestPathQueries2(n int, edges [][3]int) (int, error) {
 
 	return result, nil
 }
+
+// ex 14.1
+// https://atcoder.jp/contests/dp/tasks/dp_g
+func LongestPath(n int, edges [][2]int) (int, error) {
+	wEdges := make([][3]int, len(edges))
+	for i, e := range edges {
+		wEdges[i] = [3]int{e[0], e[1], 1} // weight=1
+	}
+	g, err := NewGraph(n, wEdges)
+	if err != nil {
+		return 0, err
+	}
+
+	dp := make([]int, n)
+	for i := range dp {
+		dp[i] = -1
+	}
+
+	for v := 0; v < n; v++ {
+		longestPath(g, v, &dp)
+	}
+	return intutil.Max(dp...), nil
+}
+
+func longestPath(g *Graph, s int, dp *[]int) int {
+	if (*dp)[s] != -1 {
+		return (*dp)[s]
+	}
+	var longest int
+	for _, edge := range (*g)[s] {
+		intutil.Chmax(&longest, 1+longestPath(g, edge.To, dp))
+	}
+	(*dp)[s] = longest
+	return (*dp)[s]
+}
