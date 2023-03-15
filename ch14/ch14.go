@@ -85,6 +85,14 @@ func chmin(a *int, b int) bool {
 	return false
 }
 
+func chmax(a *int, b int) bool {
+	if (*a) < b {
+		*a = b
+		return true
+	}
+	return false
+}
+
 // 14.3
 func Dijkstra(g *Graph, s int) []int {
 	n := len(*g)
@@ -234,4 +242,33 @@ func longestPath(g *Graph, s int, dp *[]int) int {
 	}
 	(*dp)[s] = longest
 	return (*dp)[s]
+}
+
+// ex 14.2
+// https://atcoder.jp/contests/abc061/tasks/abc061_d
+// ref. BellmanFord
+func ScoreAttack(g *Graph) int {
+	n := len(*g)
+	dist := make([]int, n)
+	for i := range dist {
+		dist[i] = math.MinInt
+	}
+	dist[0] = 0
+
+	for iter := 0; iter <= n*2; iter++ {
+		for v := 0; v < n; v++ {
+			if dist[v] == math.MinInt {
+				continue
+			}
+			for _, edge := range (*g)[v] {
+				if chmax(&dist[edge.To], dist[v]+edge.W) {
+					if edge.To == n-1 && iter == n*2 {
+						// cycle exists
+						return math.MaxInt
+					}
+				}
+			}
+		}
+	}
+	return dist[n-1]
 }

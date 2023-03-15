@@ -1,6 +1,7 @@
 package ch14_test
 
 import (
+	"math"
 	"testing"
 
 	"github.com/bunorita/book-algorithm-solution/ch14"
@@ -313,6 +314,72 @@ func TestLongestPath(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
+			if got != tt.want {
+				t.Errorf("got: %d, want: %d", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestScoreAttack(t *testing.T) {
+	t.Parallel()
+
+	tests := []*struct {
+		name  string
+		n     int
+		edges [][3]int
+		want  int
+	}{
+		{
+			name: "case1",
+			n:    3,
+			edges: [][3]int{
+				{1, 2, 4},
+				{2, 3, 3},
+				{1, 3, 5},
+			},
+			want: 7,
+		},
+		{
+			name: "case2",
+			n:    2,
+			edges: [][3]int{
+				{1, 2, 1},
+				{2, 1, 1},
+			},
+			want: math.MaxInt,
+		},
+		{
+			name: "case3",
+			n:    6,
+			edges: [][3]int{
+				{1, 2, -1000000000},
+				{2, 3, -1000000000},
+				{3, 4, -1000000000},
+				{4, 5, -1000000000},
+				{5, 6, -1000000000},
+			},
+			want: -5000000000,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			// 1-based => 0-based indexing
+			for i := range tt.edges {
+				tt.edges[i][0]--
+				tt.edges[i][1]--
+			}
+
+			g, err := ch14.NewGraph(tt.n, tt.edges)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			got := ch14.ScoreAttack(g)
 			if got != tt.want {
 				t.Errorf("got: %d, want: %d", got, tt.want)
 			}
