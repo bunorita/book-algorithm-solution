@@ -3,9 +3,11 @@ package ch14
 import (
 	"errors"
 	"fmt"
+	"log"
 	"math"
 	"sort"
 
+	"github.com/bunorita/book-algorithm-solution/ch08"
 	"github.com/bunorita/book-algorithm-solution/ch09"
 	"github.com/bunorita/book-algorithm-solution/intutil"
 )
@@ -271,4 +273,45 @@ func ScoreAttack(g *Graph) int {
 		}
 	}
 	return dist[n-1]
+}
+
+// ex 14.3
+// https://atcoder.jp/contests/abc132/tasks/abc132_e
+func HopscotchAddict(g *Graph, s, t int) int {
+	n := len(*g)
+	dist := make([][3]int, n)
+	for i := range dist {
+		dist[i] = [3]int{-1, -1, -1}
+	}
+	dist[s][0] = 0
+
+	type pair struct{ v, r int } // r = 0,1,2
+
+	todo := ch08.NewQueue[pair]()
+	if err := todo.Push(pair{v: s, r: 0}); err != nil {
+		log.Fatal(err)
+	}
+
+	for !todo.IsEmpty() {
+		cur, err := todo.Pop()
+		if err != nil {
+			log.Fatal(err)
+		}
+		for _, edge := range (*g)[cur.v] {
+			nextV := edge.To
+			nextR := (cur.r + 1) % 3
+			if dist[nextV][nextR] != -1 { // 探索済み
+				continue
+			}
+			dist[nextV][nextR] = dist[cur.v][cur.r] + 1
+			if err := todo.Push(pair{v: nextV, r: nextR}); err != nil {
+				log.Fatal(err)
+			}
+		}
+	}
+
+	if dist[t][0] == -1 {
+		return dist[t][0]
+	}
+	return dist[t][0] / 3
 }

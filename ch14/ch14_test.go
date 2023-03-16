@@ -386,3 +386,91 @@ func TestScoreAttack(t *testing.T) {
 		})
 	}
 }
+
+func TestHopscotchAddict(t *testing.T) {
+	t.Parallel()
+
+	tests := []*struct {
+		name       string
+		n          int
+		edges      [][3]int
+		s, t, want int
+	}{
+		{
+			name: "case1",
+			n:    4,
+			edges: [][3]int{
+				{1, 2},
+				{2, 3},
+				{3, 4},
+				{4, 1},
+			},
+			s:    1,
+			t:    3,
+			want: 2,
+		},
+		{
+			name: "case2",
+			n:    3,
+			edges: [][3]int{
+				{1, 2},
+				{2, 3},
+				{3, 1},
+			},
+			s:    1,
+			t:    2,
+			want: -1,
+		},
+		{
+			name:  "case3",
+			n:     2,
+			edges: [][3]int{},
+			s:     1,
+			t:     2,
+			want:  -1,
+		},
+		{
+			name: "case4",
+			n:    6,
+			edges: [][3]int{
+				{1, 2},
+				{2, 3},
+				{3, 4},
+				{4, 5},
+				{5, 1},
+				{1, 4},
+				{1, 5},
+				{4, 6},
+			},
+			s:    1,
+			t:    6,
+			want: 2,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			// 0-based indexing
+			for i := range tt.edges {
+				tt.edges[i][0]--
+				tt.edges[i][1]--
+				tt.edges[i][2] = 1 // no weight
+			}
+			tt.s--
+			tt.t--
+
+			g, err := ch14.NewGraph(tt.n, tt.edges)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			got := ch14.HopscotchAddict(g, tt.s, tt.t)
+			if got != tt.want {
+				t.Errorf("got: %d, want: %d", got, tt.want)
+			}
+		})
+	}
+}
