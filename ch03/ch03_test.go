@@ -211,7 +211,7 @@ func TestCount(t *testing.T) {
 	}
 }
 
-func SecondSmallest(t *testing.T) {
+func TestSecondSmallest(t *testing.T) {
 	t.Parallel()
 
 	a := []int{1, 4, 3, 12, 7, 11}
@@ -282,12 +282,40 @@ func TestDividableCount(t *testing.T) {
 func TestCountOfTheComb(t *testing.T) {
 	t.Parallel()
 
-	k := 10
-	n := 17
-	want := 87
-	got := ch03.CountOfTheComb(k, n)
-	if got != want {
-		t.Errorf("want %d, but got %d\n", want, got)
+	tests := []*struct {
+		name       string
+		k, n, want int
+	}{
+		{
+			name: "case1",
+			k:    2,
+			n:    2,
+			want: 6,
+		},
+		{
+			name: "case2",
+			k:    5,
+			n:    15,
+			want: 1,
+		},
+		{
+			name: "case3",
+			k:    10,
+			n:    17,
+			want: 87,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			got := ch03.CountOfTheComb(tt.k, tt.n)
+			if got != tt.want {
+				t.Errorf("want %d, but got %d\n", tt.want, got)
+			}
+		})
 	}
 }
 

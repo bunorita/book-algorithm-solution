@@ -7,6 +7,8 @@ import (
 	"math"
 	"strconv"
 	"strings"
+
+	"github.com/bunorita/book-algorithm-solution/intutil"
 )
 
 // code 3.1
@@ -58,6 +60,7 @@ func MinSum(a, b []int) int {
 	return min
 }
 
+// code 3.6
 // PartialSumEquals returns whether partial sum of a equals w
 // bit全探索
 // O(2^n)
@@ -110,7 +113,7 @@ func SecondSmallest(a []int) int {
 	first, second := math.MaxInt, math.MaxInt
 	for _, ai := range a {
 		if ai < first {
-			first = ai
+			first, second = ai, first
 		} else if ai < second {
 			second = ai
 		}
@@ -139,7 +142,7 @@ func LargestDiff(a []int) int {
 func DividableCount(a []int) int {
 	min := math.MaxInt
 	for _, ai := range a {
-		min = Less(min, dividableCount(ai))
+		intutil.Chmin(&min, dividableCount(ai))
 	}
 	return min
 }
@@ -164,6 +167,7 @@ func Less(a, b int) int {
 
 // ex 3.6
 // how many combinations of three integers of which each number is less than or equal to k, and the sum equals n
+// https://atcoder.jp/contests/abc051/tasks/abc051_b
 func CountOfTheComb(k, n int) int {
 	var count int
 	for x := 0; x <= k; x++ {
